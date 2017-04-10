@@ -6,3 +6,11 @@ f:\.Net Core\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebA
 f:\.Net Core\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.AssemblyInfo.cs
 f:\.Net Core\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.dll
 f:\.Net Core\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.pdb
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebApi.deps.json
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebApi.runtimeconfig.json
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebApi.runtimeconfig.dev.json
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebApi.dll
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\Debug\netcoreapp1.1\OrderCombinationWebApi.pdb
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.AssemblyInfo.cs
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.dll
+f:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\Debug\netcoreapp1.1\OrderCombinationWebApi.pdb

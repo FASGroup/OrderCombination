@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using OrderCombinationWebApi.Middleware;
 
 namespace OrderCombinationWebApi
 {
@@ -30,6 +31,8 @@ namespace OrderCombinationWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<OrderCombinationDbContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("OrderCombinationDb")));
+            // 添加缓存支持
+            services.AddMemoryCache();
             // Add framework services.
             services.AddMvc();
         }
@@ -39,6 +42,9 @@ namespace OrderCombinationWebApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+        
+            /* 添加token检查中间件 */
+            app.UseMiddleware<TokenMiddleware>();
 
             app.UseMvc();
         }
