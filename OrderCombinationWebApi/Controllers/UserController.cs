@@ -8,7 +8,7 @@ using OrderCombinationWebApi.Common;
 using OrderCombinationWebApi.Model;
 using System;
 using Microsoft.Extensions.Caching.Memory;
-
+using Newtonsoft.Json;
 
 namespace OrderCombinationWebApi.Controllers
 {
@@ -29,8 +29,10 @@ namespace OrderCombinationWebApi.Controllers
         ///</returns>
         [HttpPost]
         [Route("GetUserInfo")]
-        public async Task<OperateResult> GetUserInfo([FromBody]User user)
+        public async Task<OperateResult> GetUserInfo([FromBody]dynamic data)
         {
+            User user = JsonConvert.DeserializeObject<User>(data.ToString());
+
             User u = await this.orderCombinationDbContext.Users.AsNoTracking().FirstOrDefaultAsync(
                 x=>x.UserName == user.UserName && x.Password == user.Password
             );
@@ -51,7 +53,8 @@ namespace OrderCombinationWebApi.Controllers
                     .SetSlidingExpiration(TimeSpan.FromMinutes(20)));
                 }
 
-                return new OperateResult(){ IsSuccess=true,Message="",Data=user,Data2=token };
+                u.Password = string.Empty;
+                return new OperateResult(){ IsSuccess=true,Message="",Data=u,Data2=token };
             }
         }
 		

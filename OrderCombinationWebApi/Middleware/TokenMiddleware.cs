@@ -21,7 +21,7 @@ namespace OrderCombinationWebApi.Middleware
         public async Task Invoke(HttpContext context)
         {
             _context = context;
-			/*
+			
             string url = context.Request.Path;
             if (!url.Contains("GetUserInfo"))
             {
@@ -33,7 +33,7 @@ namespace OrderCombinationWebApi.Middleware
                     return;
                 }
             }
-			*/
+			
             await _next.Invoke(context);
         }
 
