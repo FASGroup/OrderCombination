@@ -30,5 +30,16 @@ namespace OrderCombinationWebApi.Controllers
             return await this.orderCombinationDbContext.OrderInfos
                  .Where(a => a.State == (int)CommonValue.OrderState.UnMerge).AsNoTracking().ToListAsync();
         }
+
+        [HttpGet]
+        [Route("GetMergeOrder")]
+        public async Task<MergeOrder> GetMergeOrder(string mergeId)
+        {
+            var mergeOrder = new MergeOrder(){MergeId=mergeId};
+            mergeOrder.MergeOrderList = await this.orderCombinationDbContext.OrderInfos
+                    .Where(a=>a.MergeId == mergeId).AsNoTracking().ToListAsync();
+
+            return mergeOrder;
+        }
     }
 }
