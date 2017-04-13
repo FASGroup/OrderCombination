@@ -42,9 +42,6 @@ namespace OrderCombinationWebApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-        
-            /* 添加token检查中间件 */
-            app.UseMiddleware<TokenMiddleware>();
 
             app.UseMvc();
         }

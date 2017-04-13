@@ -9,9 +9,12 @@ using OrderCombinationWebApi.Model;
 using System;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using OrderCombinationWebApi.Attributes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderCombinationWebApi.Controllers
 {
+    [BasicAuthentication]
     public class UserController : BaseController
     {
 
@@ -29,6 +32,7 @@ namespace OrderCombinationWebApi.Controllers
         ///</returns>
         [HttpPost]
         [Route("GetUserInfo")]
+        [AllowAnonymous]
         public async Task<OperateResult> GetUserInfo([FromBody]dynamic data)
         {
             User user = JsonConvert.DeserializeObject<User>(data.ToString());
@@ -36,12 +40,10 @@ namespace OrderCombinationWebApi.Controllers
             User u = await this.orderCombinationDbContext.Users.AsNoTracking().FirstOrDefaultAsync(
                 x=>x.UserName == user.UserName && x.Password == user.Password
             );
-            //User user = new User();
 
             if(u == null){return new OperateResult(){ IsSuccess=false,Message="账号或密码错误!" };}
             else
             {
-				// var token = Convert.ToBase64String(guid.ToByteArray()).TrimEnd('=');
                 string token = this.GenerateUserToken(user);/* 生成token信息返回给用户 */
 
                 string result;
@@ -57,36 +59,22 @@ namespace OrderCombinationWebApi.Controllers
                 return new OperateResult(){ IsSuccess=true,Message="",Data=u,Data2=token };
             }
         }
-		
-		//测试方法
-		[HttpGet]
+
+        //测试方法
+        [HttpGet]
         [Route("GetTestList")]
-        public async Task<OperateResult> GetTestList()
+        public OperateResult GetTestList()
         {
             List<string> data = new List<string>(){
-				"测试数据1",
-				"测试数据2",
-				"测试数据3",
-				"测试数据4",
-				"测试数据5"
-			};
+                "测试数据1",
+                "测试数据2",
+                "测试数据3",
+                "测试数据4",
+                "测试数据5"
+            };
 
-            return new OperateResult(){ IsSuccess=true,Message="",Data=data,Data2=null };
+            return new OperateResult() { IsSuccess = true, Message = "", Data = data, Data2 = null };
         }
-
-        [HttpGet]
-        [Route("ValidToken")]
-        public async Task<OperateResult> ValidToken(string token)
-        {
-            UserToken tokenObj = await this.orderCombinationDbContext.UserTokens.AsNoTracking().FirstOrDefaultAsync(
-                x=>x.Token == token
-            );
-
-            if(tokenObj == null){return new OperateResult(){ IsSuccess=false,Message="无效的token." };}
-            if(tokenObj.ExpireTime < DateTime.Now){return new OperateResult(){ IsSuccess=false,Message="token已过期." };}
-            return new OperateResult(){ IsSuccess=true,Message="",Data=token };
-        }
-
         /* 
             生成用户token信息并返回token
         */
