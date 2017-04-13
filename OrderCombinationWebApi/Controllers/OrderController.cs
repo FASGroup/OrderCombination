@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.OrderCombinationWebApi.DataAccess;
@@ -41,5 +42,22 @@ namespace OrderCombinationWebApi.Controllers
 
             return mergeOrder;
         }
+
+        ///<summary>
+        /// 合并订单
+        ///</summary>
+        ///<returns>
+        /// 合并后GUID
+        ///</returns>
+        [HttpGet]
+        [Route("MegerOrder")]
+        public async Task<CommondityResult> MegerOrder(int userId)
+        {            
+            SqlParameter userIdSqlParamter = new SqlParameter("@mergeUserId",userId);
+            var result = await this.orderCombinationDbContext.CommondityResults.FromSql("Exec dbo.Usp_MergeOrder @mergeUserId ",userIdSqlParamter).FirstOrDefaultAsync();
+
+            return result;
+        }
+
     }
 }

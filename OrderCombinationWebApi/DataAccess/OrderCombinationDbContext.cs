@@ -15,6 +15,7 @@ namespace DataAccess.OrderCombinationWebApi.DataAccess
         public DbSet<UserToken> UserTokens {get;set;}
         public DbSet<User> Users {get;set;}
         public DbSet<OrderInfo> OrderInfos {get;set;}
+        public DbSet<CommondityResult> CommondityResults{get;set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -23,6 +24,7 @@ namespace DataAccess.OrderCombinationWebApi.DataAccess
             OrderInfoMapping.Config(builder.Entity<OrderInfo>());
             UserTokenMapping.Config(builder.Entity<UserToken>());
             UserMapping.Config(builder.Entity<User>());
+            builder.Ignore<CommondityResult>();
         }
     }
 }
