@@ -15,7 +15,7 @@ import {
   ListView
 }
   from 'react-native';
-var App = require('../app.core');
+import AppCore from '../app.core';
 import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
 var Dimensions = require('Dimensions');
@@ -23,9 +23,6 @@ var Dimensions = require('Dimensions');
 export default class JDIndex extends Component {
   constructor(props) {
     super(props);
-    //const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    // let data;  
-    // App.send('api/Order/GetUnMergeList').then((response)=>{data =response.json();});
     this.state = {
       dataSource: this.ds.cloneWithRows([]),
       isLoading: false
@@ -163,61 +160,19 @@ export default class JDIndex extends Component {
           </View>
           <ActivityIndicatorComponent ref='dialog' />
         </View>
-      </DrawerLayoutAndroid>
-
-      //  <View style={styles.header}>
-      //        <Text style={styles.headerTitle} >京东凑单</Text>
-      //     </View>
-      //  <View style={styles.container}> 
-      //      <View style={styles.header}>
-      //         <Text style={styles.headerTitle} >京东凑单</Text>
-      //        </View>
-
-      //      <View style={styles.content}>
-      //          <ListView dataSource={this.state.dataSource}
-      //             renderRow={(rowData) => this.customerRenderRow(rowData)}>
-      //          </ListView>
-      //        </View >
-
-      //        <View style={styles.foot}>
-      //             <View style={styles.footBlank}>
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了新增"); } }
-      //                 title="新增"
-      //                 accessibilityLabel="新增"  />
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了凑单"); } }
-      //                 title="凑单"
-      //                 accessibilityLabel="凑单"
-      //                 />
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了刷新"); } }
-      //                 title="刷新"
-      //                 accessibilityLabel="刷新"
-      //                 />
-      //             </View>
-      //             <View style={styles.footBlank}>
-      //             </View>
-      //           </View> 
-      //      </View>
+      </DrawerLayoutAndroid>     
 
     );
 
   }
 
-  componentDidMount() {
-    this.refreshData();
+ async componentDidMount() {
+   await this.refreshData();
   }
 
   async refreshData() {
     this.refs.dialog.showWaiting();
-    let data = await App.send('api/Order/GetUnMergeList');
+    let data = await AppCore.send('api/Order/GetUnMergeList');
     this.setState({ dataSource: this.ds.cloneWithRows(data) });
     this.refs.dialog.hideWaiting();
   }
@@ -248,8 +203,8 @@ export default class JDIndex extends Component {
 
   async mergeOrder() {
     this.refs.dialog.showWaiting();
-    let currentUser = await App.getUser();
-    let megerModel = await App.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
+    let currentUser = await AppCore.getUser();
+    let megerModel = await AppCore.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
     this.refs.dialog.hideWaiting();
     if (!megerModel.mergeId) {
 

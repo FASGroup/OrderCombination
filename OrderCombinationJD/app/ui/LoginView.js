@@ -7,7 +7,10 @@ import {
     Image,
     ScrollView,
     StyleSheet,
-    Alert
+    Alert,
+    Platform,
+    BackAndroid ,
+    ToastAndroid
 } from 'react-native'
 
 import TextBox from '../lib/TextBox'
@@ -136,6 +139,29 @@ export default class LoginView extends Component {
         }
 		*/
     }
+
+    
+  componentWillMount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+
+  componentWillUnmount() {
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+  }
+  
+  onBackAndroid = () => {
+     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+      //最近2秒内按过back键，可以退出应用。
+      return false;
+    }
+    this.lastBackPressed = Date.now();
+    ToastAndroid.show('再按一次退出应用',ToastAndroid.SHORT);
+    return true;
+  };
 }
 
 const loginPageStyles = StyleSheet.create({

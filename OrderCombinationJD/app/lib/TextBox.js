@@ -13,6 +13,7 @@ export default  class TextBox extends Component {
         super(props);
         this.state = { text : ''};
     }
+
     render (){
         return (
             <View style={TextBoxStyles.TextBoxView}>
