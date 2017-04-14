@@ -67,13 +67,15 @@ namespace OrderCombinationWebApi.Attributes
                 //context.Response.Headers.Add("Content-type", "application/json;charset=UTF-8"); 
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 //context.Response.WriteAsync("无效的token或token已过期");
-
+				/*
                 OperateResult r = new OperateResult
                 {
                     Data = "401",
                     Message = "You are not authorized!(无效的token或token已过期)"
                 };
-                filterContext.Result = new JsonResult(JsonConvert.SerializeObject(r));
+				*/
+                //filterContext.Result = new JsonResult(JsonConvert.SerializeObject(r));
+				filterContext.Result = new JsonResult("You are not authorized!(无效的token或token已过期)");
             }
 
             /// <summary>

@@ -67,7 +67,7 @@ export default class LoginView extends Component {
         if(uobj.pwd == ''){ App.showMessage('密码不允许为空'); return;}
         var obj = { UserName: uobj.uid, Password: uobj.pwd };
 		
-		let data = await App.send('api/User/GetUserInfo',{method:"POST",data:obj});
+		let data = await App.send('api/User/GetUserInfo',{method:"POST",data:obj,timeout:5000});
         if(data && data.isSuccess)
         {
             App.setCache(App.const.token_key,data.data2);

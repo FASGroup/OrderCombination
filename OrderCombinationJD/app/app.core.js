@@ -153,6 +153,7 @@ var AppCore = {
           return cb(res);
         })
         .catch((error) => {
+          this.showMessage(error.message);
           console.warn(error);
 		  //this.showMessage(JSON.stringify(error));
         });
@@ -185,6 +186,27 @@ var AppCore = {
     },
 
 };
+
+/*
+var oldFetchfn = fetch; //拦截原始的fetch方法
+window.fetch = function(input, opts){//定义新的fetch方法，封装原有的fetch方法
+    return new Promise(function(resolve, reject){
+        var timeoutId = setTimeout(function(){
+            reject(new Error("网络超时."))
+        }, opts.timeout || 120 * 1000);
+        oldFetchfn(input, opts).then(
+            res=>{
+                clearTimeout(timeoutId);
+                resolve(res)
+            },
+            err=>{
+                clearTimeout(timeoutId);
+                reject(err)
+            }
+        )
+    })
+}
+*/
 
 module.exports = AppCore;
 

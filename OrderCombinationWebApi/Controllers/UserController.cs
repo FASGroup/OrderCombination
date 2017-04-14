@@ -1,20 +1,16 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.OrderCombinationWebApi.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OrderCombinationWebApi.Common;
 using OrderCombinationWebApi.Model;
 using System;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using OrderCombinationWebApi.Attributes;
 using Microsoft.AspNetCore.Authorization;
 
 namespace OrderCombinationWebApi.Controllers
 {
-    [BasicAuthentication]
     public class UserController : BaseController
     {
 
