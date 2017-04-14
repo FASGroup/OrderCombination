@@ -28,8 +28,20 @@ namespace OrderCombinationWebApi.Controllers
         [Route("GetUnMergeList")]
         public async Task<List<OrderInfo>> GetUnMergeList()
         {
-            return await this.orderCombinationDbContext.OrderInfos
+            var result = await this.orderCombinationDbContext.OrderInfos
                  .Where(a => a.State == (int)CommonValue.OrderState.UnMerge).AsNoTracking().ToListAsync();
+
+            result.ForEach(a=>{
+                if(a.CommodityName.Length>10)                
+                {
+                    a.CommodityName = a.CommodityName.Substring(0,10)+"...";
+                }
+            });
+
+            return result;
+
+            // return await this.orderCombinationDbContext.OrderInfos
+            //      .Where(a => a.State == (int)CommonValue.OrderState.UnMerge).AsNoTracking().ToListAsync();
         }
 
         [HttpGet]
