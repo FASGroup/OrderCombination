@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using OrderCombinationWebApi.Attributes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OrderCombinationWebApi
 {
@@ -33,7 +35,11 @@ namespace OrderCombinationWebApi
             // 添加缓存支持
             services.AddMemoryCache();
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new BasicAuthenticationAttribute()); // by type
+                //options.Filters.Add(typeof(BasicAuthenticationAttribute)); // by type
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
