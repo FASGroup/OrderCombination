@@ -208,7 +208,7 @@ export default class JDIndex extends Component {
     this.refs.dialog.hideWaiting();
     if (!megerModel.mergeId) {
 
-      App.showMessage("没有可以合并的订单");
+      AppCore.showMessage("没有可以合并的订单");
 
     } else {
       this.props.navigator.push({
