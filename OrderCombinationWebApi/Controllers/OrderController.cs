@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderCombinationWebApi.Common;
 using OrderCombinationWebApi.Model;
+using System;
 
 namespace OrderCombinationWebApi.Controllers
 {
@@ -55,6 +56,7 @@ namespace OrderCombinationWebApi.Controllers
             return mergeOrder;
         }
 
+        
         ///<summary>
         /// 合并订单
         ///</summary>
@@ -64,11 +66,43 @@ namespace OrderCombinationWebApi.Controllers
         [HttpGet]
         [Route("MegerOrder")]
         public async Task<CommondityResult> MegerOrder(int userId)
-        {            
-            SqlParameter userIdSqlParamter = new SqlParameter("@mergeUserId",userId);
-            var result = await this.orderCombinationDbContext.CommondityResults.FromSql("Exec dbo.Usp_MergeOrder @mergeUserId ",userIdSqlParamter).FirstOrDefaultAsync();
+        {  
+            CommondityResult model = new CommondityResult();
+            try
+            {
+                SqlParameter userIdSqlParamter = new SqlParameter("@mergeUserId", userId);
+                string sql = "Exec dbo.Usp_MergeOrder @mergeUserId";
+                var database = this.orderCombinationDbContext.Database;
+                using (var connection = database.GetDbConnection())
+                {
+                    using (var command = connection.CreateCommand())
+                    {                    
+                        command.CommandText = sql;
+                        command.Parameters.Add(userIdSqlParamter);
+                        await connection.OpenAsync();
+                        var reader = await command.ExecuteReaderAsync();
+                        if (reader.HasRows)
+                        {
+                            while (await reader.ReadAsync())
+                            {                                
+                                model.MergeId = reader[0].ToString();
+                                return model;
+                            }
 
-            return result;
+                            return model;
+                        }
+                        else
+                        {
+                             model = new CommondityResult();
+                            return model;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                 return model;
+            }
         }
 
     }

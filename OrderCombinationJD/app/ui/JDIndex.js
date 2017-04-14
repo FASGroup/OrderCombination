@@ -15,7 +15,7 @@ import {
   ListView
 }
   from 'react-native';
-import App from '../app.core';
+var App = require('../app.core');
 import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
 var Dimensions = require('Dimensions');
@@ -248,17 +248,17 @@ export default class JDIndex extends Component {
 
   async mergeOrder() {
     this.refs.dialog.showWaiting();
-    let currentUser = App.getUser();
-    let megerGuid = await App.send("api/Order/MegerOrder", { method: "POST", data: { userId: currentUser.Id } });
+    let currentUser = await App.getUser();
+    let megerModel = await App.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
     this.refs.dialog.hideWaiting();
-    if (!megerGuid) {
+    if (!megerModel.mergeId) {
 
       App.showMessage("没有可以合并的订单");
 
     } else {
       this.props.navigator.push({
         name: 'JDUserInfoEdit',
-        params:{mergeid:megerGuid.mergeId}        
+        params:{mergeid:megerModel.megerGuid}        
       });
     }
   }
