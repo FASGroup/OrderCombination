@@ -26,9 +26,10 @@ export default class ThirdPageComponent extends React.Component {
 
      _pressBackButton() {
          if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDUserInfo'
-            });
+            // this.props.navigator.push({
+            //     name: 'JDUserInfo'
+            // });
+            this.props.navigator.pop();
         }
     }
     
