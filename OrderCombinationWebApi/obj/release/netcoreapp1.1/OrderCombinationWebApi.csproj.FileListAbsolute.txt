@@ -1,8 +1,0 @@
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\release\netcoreapp1.1\OrderCombinationWebApi.deps.json
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\release\netcoreapp1.1\OrderCombinationWebApi.runtimeconfig.json
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\release\netcoreapp1.1\OrderCombinationWebApi.runtimeconfig.dev.json
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\release\netcoreapp1.1\OrderCombinationWebApi.AssemblyInfo.cs
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\release\netcoreapp1.1\OrderCombinationWebApi.dll
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\bin\release\netcoreapp1.1\OrderCombinationWebApi.pdb
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\release\netcoreapp1.1\OrderCombinationWebApi.dll
-F:\Code\ReactNative\Project\APIProject\OrderCombinationWebApi\obj\release\netcoreapp1.1\OrderCombinationWebApi.pdb
