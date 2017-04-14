@@ -59,10 +59,11 @@ var AppCore = {
       var key = this.const.token_key;
       var value = await AsyncStorage.getItem(key);
       if (value !== null) {
-        func(value);
+        func && func(value);
       } else {
-        func(false);
+        func && func(false);
       }
+	  return value;
     },
 	/* 获取用户信息 */
     async getUser(func) {
@@ -70,8 +71,9 @@ var AppCore = {
       var user = await AsyncStorage.getItem(key);
       if (user != null) {
         user = JSON.parse(user);
-        func(user);
+        func && func(user);
       }
+	  return user;
     },
 	/* 根据key获取缓存中的信息 */
     async getCache(key) {
