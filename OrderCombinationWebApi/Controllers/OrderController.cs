@@ -32,12 +32,12 @@ namespace OrderCombinationWebApi.Controllers
             var result = await this.orderCombinationDbContext.OrderInfos
                  .Where(a => a.State == (int)CommonValue.OrderState.UnMerge).AsNoTracking().ToListAsync();
 
-            result.ForEach(a=>{
-                if(a.CommodityName.Length>10)                
-                {
-                    a.CommodityName = a.CommodityName.Substring(0,10)+"...";
-                }
-            });
+            // result.ForEach(a=>{
+            //     if(a.CommodityName.Length>20)                
+            //     {
+            //         a.CommodityName = a.CommodityName.Substring(0,20)+"...";
+            //     }
+            // });
 
             return result;
 
