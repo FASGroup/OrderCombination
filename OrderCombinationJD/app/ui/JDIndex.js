@@ -12,7 +12,10 @@ import {
   TouchableHighlight,
   DrawerLayoutAndroid,
   Alert,
-  ListView
+  ListView,
+  PixelRatio,
+  Platform,
+  RefreshControl
 }
   from 'react-native';
 import AppCore from '../app.core';
@@ -25,7 +28,7 @@ export default class JDIndex extends Component {
     super(props);
     this.state = {
       dataSource: this.ds.cloneWithRows([]),
-      isLoading: false
+      isRefreshing: false
     };
   }
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -57,6 +60,7 @@ export default class JDIndex extends Component {
       });
     }
   }
+
   _turnToJDIndexPage() {
     //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
     if (this.props.navigator) {
@@ -127,61 +131,62 @@ export default class JDIndex extends Component {
 
           <View style={styles.content}>
             <ListView dataSource={this.state.dataSource}
-              renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}>
+              renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}
+              refreshControl={<RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={this.refreshData.bind(this)}
+                tintColor="#ff0000"
+                title="Loading..."
+                titleColor="#00ff00"
+                colors={['#a9a9a9']}
+                progressBackgroundColor="#f0f8ff"
+              />}
+            >
             </ListView>
           </View >
 
           <View style={styles.foot}>
-            <View style={styles.footBlank}>
-            </View>
             <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => { Alert.alert("点击了新增"); }}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  新增
-                                      </Text>
+              <TouchableHighlight
+                onPress={() => { Alert.alert("点击了新增"); }}
+                style={styles.footButtonColor}
+                underlayColor="gainsboro"
+              ><Text style={styles.footButtonFontColor}>新增</Text>
               </TouchableHighlight>
             </View>
             <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => this.mergeOrder()}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  凑单
-                                      </Text>
+              <TouchableHighlight
+                onPress={() => this.mergeOrder()}
+                style={styles.footButtonColor}
+                underlayColor="gainsboro"
+              ><Text style={styles.footButtonFontColor}>凑单</Text>
               </TouchableHighlight>
-            </View>
-            <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => this.refreshData()}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  刷新
-                                      </Text>
-              </TouchableHighlight>
-            </View>
-            <View style={styles.footBlank}>
             </View>
           </View>
           <ActivityIndicatorComponent ref='dialog' />
         </View>
-      </DrawerLayoutAndroid>     
-
+      </DrawerLayoutAndroid>
     );
-
   }
 
- async componentDidMount() {
-   await this.refreshData();
+  async componentDidMount() {
+    await this.refreshData();
   }
 
   async refreshData() {
-    this.refs.dialog.showWaiting();
+    //this.refs.dialog.showWaiting();
+    this.setState({ isRefreshing: true });
     let data = await AppCore.send('api/Order/GetUnMergeList');
     this.setState({ dataSource: this.ds.cloneWithRows(data) });
-    this.refs.dialog.hideWaiting();
+    this.setState({ isRefreshing: false });
+    //this.refs.dialog.hideWaiting();
   }
 
   customerRenderRow(rowData) {
     return (
       <View style={styles.listViewRow} >
         <View style={styles.listViewRowGoodImage}>
-          <Image source={require('../res/images/Good.png')} style={{ width: 40, height: 40 }} />
+          <Image source={require('../res/images/Good.png')} style={{ width: 40, height: 50 }} />
         </View>
         <View style={styles.listViewRowGoodInfo}>
           <View style={styles.ListViewItemTitle}>
@@ -213,31 +218,17 @@ export default class JDIndex extends Component {
     } else {
       this.props.navigator.push({
         name: 'JDUserInfoEdit',
-        params:{mergeid:megerModel.megerGuid}        
+        params: { mergeid: megerModel.megerGuid }
       });
     }
   }
 }
 
 const styles = StyleSheet.create({
-  edit: {
-    marginTop: 30,
-    height: 40,
-    fontSize: 20,
-    backgroundColor: '#fff'
-  },
-
-  Viewstyle: {
-    flex: 1,
-    flexDirection: 'row',
-    borderBottomColor: '#c1b4b457',
-    borderBottomWidth: 0.5,
-  },
   container: {
     flex: 2,
     flexDirection: 'column',
   },
-
   header: {
     height: 30,
     alignItems: "center",
@@ -257,20 +248,24 @@ const styles = StyleSheet.create({
   },
   foot: {
     flexDirection: 'row',
-    height: 40,
+    height: 40
   },
   footButton: {
     flex: 2,
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center"
   },
   footBlank: {
     flex: 1
   },
   listViewRow: {
     flexDirection: 'row',
-    height: 50,
-    marginBottom: 10
+    height: 100,
+    marginBottom: 20,
+    marginRight:5
   },
   listViewRowGoodImage:
   {
@@ -280,21 +275,26 @@ const styles = StyleSheet.create({
   },
   listViewRowGoodInfo: {
     flex: 4,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   ListViewItemTitle: {
+    flex:2,
     flexDirection: 'row',
     justifyContent: "flex-start",
-    marginLeft: 10
+    marginLeft: 10,
   },
   ListViewItemDtl: {
+    flex:1,
     flexDirection: 'row',
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    borderBottomColor: "#e6e6fa",
+    borderBottomWidth: 1,
+    paddingBottom: 10
   },
   listViewRowName: {
     justifyContent: "center",
     fontFamily: "Verdana bold",
-    fontSize: 20
+    fontSize: 15
   },
   listViewRowCount: {
     flex: 1
@@ -311,7 +311,20 @@ const styles = StyleSheet.create({
     color: "orange",
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  footButtonColor: {
+    width: 100,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: '#3281DD',
+    borderColor: '#3281DD',
+    borderRadius: 15,
+    borderWidth: (Platform.OS === 'ios' ? 1.0 : 1.5) / PixelRatio.get()
+  },
+  footButtonFontColor:{
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 15,
   }
-
-
 });

@@ -32,13 +32,12 @@ namespace OrderCombinationWebApi.Controllers
             var result = await this.orderCombinationDbContext.OrderInfos
                  .Where(a => a.State == (int)CommonValue.OrderState.UnMerge).AsNoTracking().ToListAsync();
 
-            result.ForEach(a =>
-            {
-                if (a.CommodityName.Length > 10)
-                {
-                    a.CommodityName = a.CommodityName.Substring(0, 10) + "...";
-                }
-            });
+            // result.ForEach(a=>{
+            //     if(a.CommodityName.Length>20)                
+            //     {
+            //         a.CommodityName = a.CommodityName.Substring(0,20)+"...";
+            //     }
+            // });
 
             return result;
 
@@ -50,14 +49,14 @@ namespace OrderCombinationWebApi.Controllers
         [Route("GetMergeOrder")]
         public async Task<MergeOrder> GetMergeOrder(string mergeId)
         {
-            var mergeOrder = new MergeOrder() { MergeId = mergeId };
+            var mergeOrder = new MergeOrder(){MergeId=mergeId};
             mergeOrder.MergeOrderList = await this.orderCombinationDbContext.OrderInfos
-                    .Where(a => a.MergeId == mergeId).AsNoTracking().ToListAsync();
+                    .Where(a=>a.MergeId == mergeId).AsNoTracking().ToListAsync();
 
             return mergeOrder;
         }
 
-
+        
         ///<summary>
         /// 合并订单
         ///</summary>
@@ -67,7 +66,7 @@ namespace OrderCombinationWebApi.Controllers
         [HttpGet]
         [Route("MegerOrder")]
         public async Task<CommondityResult> MegerOrder(int userId)
-        {
+        {  
             CommondityResult model = new CommondityResult();
             try
             {
@@ -77,7 +76,7 @@ namespace OrderCombinationWebApi.Controllers
                 using (var connection = database.GetDbConnection())
                 {
                     using (var command = connection.CreateCommand())
-                    {
+                    {                    
                         command.CommandText = sql;
                         command.Parameters.Add(userIdSqlParamter);
                         await connection.OpenAsync();
@@ -85,7 +84,7 @@ namespace OrderCombinationWebApi.Controllers
                         if (reader.HasRows)
                         {
                             while (await reader.ReadAsync())
-                            {
+                            {                                
                                 model.MergeId = reader[0].ToString();
                                 return model;
                             }
@@ -94,15 +93,15 @@ namespace OrderCombinationWebApi.Controllers
                         }
                         else
                         {
-                            model = new CommondityResult();
+                             model = new CommondityResult();
                             return model;
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return model;
+                 return model;
             }
         }
 
