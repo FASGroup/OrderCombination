@@ -4,6 +4,9 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace OrderCombinationWebApi.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("api/[controller]")]
     public class BaseController : Controller
     {
