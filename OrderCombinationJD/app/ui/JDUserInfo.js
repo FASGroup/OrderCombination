@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     DrawerLayoutAndroid,
     NavigationView,
+    Alert
 }
     from 'react-native';
 
@@ -30,9 +31,10 @@ export default class FirstPageComponent extends React.Component {
  
     _pressBackButton() {
          if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDUserInfo'
-            });
+            // this.props.navigator.push({
+            //     name: 'JDIndex'
+            // });
+            this.props.navigator.pop();
         }
     }
 

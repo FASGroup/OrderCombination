@@ -11,8 +11,9 @@ import {
 export default  class TextBox extends Component {
     constructor (props){
         super(props);
-        this.state = { text : ''};
+        this.state = { text : this.props.value || ""};
     }
+
     render (){
         return (
             <View style={TextBoxStyles.TextBoxView}>
@@ -25,9 +26,13 @@ export default  class TextBox extends Component {
                 }} 
                 underlineColorAndroid={'transparent'}
                 secureTextEntry={this.props.secureTextEntry}
+                defaultValue={this.props.value}
                 />
             </View>
         );
+    }
+    value (){
+        return this.state.text;
     }
 }
 
