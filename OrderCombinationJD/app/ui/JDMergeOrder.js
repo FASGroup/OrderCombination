@@ -20,12 +20,11 @@ import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
 var Dimensions = require('Dimensions');
 
-export default class JDIndex extends Component {
+export default class JDMergeOrder extends Component {
   constructor(props) {
     super(props);
-    //const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    // let data;  
-    // App.send('api/Order/GetUnMergeList').then((response)=>{data =response.json();});
+    console.log(props.mergeid);
+
     this.state = {
       dataSource: this.ds.cloneWithRows([]),
       isLoading: false
@@ -40,17 +39,6 @@ export default class JDIndex extends Component {
     }
   }
 
-  _pressButton1() {
-    const { navigator } = this.props;
-    //<Component {...route.params} navigator={navigator} />
-    //这里传递了navigator作为props
-    if (navigator) {
-      navigator.push({
-        // name: 'CoudanIndexPageComponent',
-        //component: CoudanIndexPageComponent,
-      })
-    }
-  }
 
   _turnToJDUserPage() {
     //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
@@ -78,16 +66,6 @@ export default class JDIndex extends Component {
     }
   }
 
-  _turnToJDMergeOrder() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
-    if (this.props.navigator) {
-      this.props.navigator.push({
-        name: 'JDMergeOrder',
-        params:{mergeid:"141736C2-434E-4FCA-8A34-80EE9841A6F0"}
-      });
-    }
-  }
-
   render() {
     var navigationView = (
       <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
@@ -96,9 +74,6 @@ export default class JDIndex extends Component {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { { this._turnToJDShppingCarPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>少辉页面</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { { this._turnToJDMergeOrder() } }}>
-          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单结果</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
@@ -128,16 +103,12 @@ export default class JDIndex extends Component {
 
             <View style={{ flex: 4, justifyContent: 'center', }}>
               <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                京东凑单
+                凑单结果
                                 </Text>
             </View>
 
             <View style={{ flex: 1, justifyContent: 'center', marginRight: 8 }}>
-              <TouchableHighlight onPress={() => Alert.alert('保存成功', '保存成功')}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  保存
-                                </Text>
-              </TouchableHighlight>
+              
             </View>
           </View>
 
@@ -146,80 +117,10 @@ export default class JDIndex extends Component {
               renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}>
             </ListView>
           </View >
-
-          <View style={styles.foot}>
-            <View style={styles.footBlank}>
-            </View>
-            <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => { Alert.alert("点击了新增"); }}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  新增
-                                      </Text>
-              </TouchableHighlight>
-            </View>
-            <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => this.mergeOrder()}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  凑单
-                                      </Text>
-              </TouchableHighlight>
-            </View>
-            <View style={styles.footButton}>
-              <TouchableHighlight onPress={() => this.refreshData()}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  刷新
-                                      </Text>
-              </TouchableHighlight>
-            </View>
-            <View style={styles.footBlank}>
-            </View>
-          </View>
           <ActivityIndicatorComponent ref='dialog' />
         </View>
       </DrawerLayoutAndroid>
-
-      //  <View style={styles.header}>
-      //        <Text style={styles.headerTitle} >京东凑单</Text>
-      //     </View>
-      //  <View style={styles.container}> 
-      //      <View style={styles.header}>
-      //         <Text style={styles.headerTitle} >京东凑单</Text>
-      //        </View>
-
-      //      <View style={styles.content}>
-      //          <ListView dataSource={this.state.dataSource}
-      //             renderRow={(rowData) => this.customerRenderRow(rowData)}>
-      //          </ListView>
-      //        </View >
-
-      //        <View style={styles.foot}>
-      //             <View style={styles.footBlank}>
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了新增"); } }
-      //                 title="新增"
-      //                 accessibilityLabel="新增"  />
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了凑单"); } }
-      //                 title="凑单"
-      //                 accessibilityLabel="凑单"
-      //                 />
-      //             </View>
-      //             <View style={styles.footButton}>
-      //                 <Button
-      //                 onPress={() => { Alert.alert("点击了刷新"); } }
-      //                 title="刷新"
-      //                 accessibilityLabel="刷新"
-      //                 />
-      //             </View>
-      //             <View style={styles.footBlank}>
-      //             </View>
-      //           </View> 
-      //      </View>
-
+      
     );
 
   }
@@ -229,9 +130,10 @@ export default class JDIndex extends Component {
   }
 
   async refreshData() {
+    console.log(this.props.mergeid);
     this.refs.dialog.showWaiting();
-    let data = await App.send('api/Order/GetUnMergeList');
-    this.setState({ dataSource: this.ds.cloneWithRows(data) });
+    let data = await App.send('api/Order/GetMergeOrder', { method: "GET", data: { mergeid: this.props.mergeid }});
+    this.setState({ dataSource: this.ds.cloneWithRows(data.mergeOrderList) });
     this.refs.dialog.hideWaiting();
   }
 
@@ -259,22 +161,6 @@ export default class JDIndex extends Component {
     );
   }
 
-  async mergeOrder() {
-    this.refs.dialog.showWaiting();
-    let currentUser = await App.getUser();
-    let megerModel = await App.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
-    this.refs.dialog.hideWaiting();
-    if (!megerModel.mergeId) {
-
-      App.showMessage("没有可以合并的订单");
-
-    } else {
-      this.props.navigator.push({
-        name: 'JDUserInfoEdit',
-        params:{mergeid:megerModel.megerGuid}        
-      });
-    }
-  }
 }
 
 const styles = StyleSheet.create({

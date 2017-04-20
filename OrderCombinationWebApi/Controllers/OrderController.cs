@@ -1,3 +1,13 @@
+// using System.Collections.Generic;
+// using System.Data.SqlClient;
+// using System.Linq;
+// using System.Threading.Tasks;
+// using DataAccess.OrderCombinationWebApi.DataAccess;
+// using Microsoft.AspNetCore.Mvc;
+// using Microsoft.EntityFrameworkCore;
+// using OrderCombinationWebApi.Common;
+// using OrderCombinationWebApi.Model;
+// using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -8,6 +18,9 @@ using Microsoft.EntityFrameworkCore;
 using OrderCombinationWebApi.Common;
 using OrderCombinationWebApi.Model;
 using System;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderCombinationWebApi.Controllers
 {
@@ -47,11 +60,11 @@ namespace OrderCombinationWebApi.Controllers
 
         [HttpGet]
         [Route("GetMergeOrder")]
-        public async Task<MergeOrder> GetMergeOrder(string mergeId)
+        public async Task<MergeOrder> GetMergeOrder(string mergeid)
         {
-            var mergeOrder = new MergeOrder(){MergeId=mergeId};
+            var mergeOrder = new MergeOrder(){MergeId=mergeid};
             mergeOrder.MergeOrderList = await this.orderCombinationDbContext.OrderInfos
-                    .Where(a=>a.MergeId == mergeId).AsNoTracking().ToListAsync();
+                    .Where(a=>a.MergeId == mergeid).AsNoTracking().ToListAsync();
 
             return mergeOrder;
         }

@@ -12,6 +12,7 @@ import JDIndex from '../ui/JDIndex'
 import JDUserInfo from '../ui/JDUserInfo'
 import JDUserInfoEdit  from '../ui/JDUserInfoEdit'
 import shoppingCar from '../ui/shoppingCar'
+import JDMergeOrder from '../ui/JDMergeOrder'
 
 export default class AppNavigator extends Component {
     render(){
@@ -22,6 +23,7 @@ export default class AppNavigator extends Component {
             JDUserInfo:JDUserInfo,
             JDUserInfoEdit:JDUserInfoEdit,
             shoppingCar:shoppingCar,
+            JDMergeOrder:JDMergeOrder,
         };
 
         let [defaultName, defaultComponent] = ['LoginView',LoginView];
