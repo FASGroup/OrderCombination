@@ -1,0 +1,59 @@
+打包安卓apk步骤
+
+打包前准备
+
+a: 找到java jdk路径(默认是在C:\Program Files\Java\jdk1.7.0_51\bin)
+   确保此文件夹中有keytool.exe 
+b: 打开cmd, 进入项目目录
+   cd xxxxxx\OrderCombinationJD
+   输入mkdir -p  android\app\src\main\assets
+   回车
+c: 想好证书信息(后面会用到)
+   证书文件名=myapp.keystore
+   证书别名=myapp-alias
+   证书密码=123456
+   秘钥密码=123456
+
+打包步骤
+
+1、打开cmd,进入项目目录 cd xxxxxx\OrderCombinationJD
+2、执行react-native bundle --platform android --dev false --entry-file index.android.js \   --bundle-output android/app/src/main/assets/index.android.bundle \ --assets-dest android/app/src/main/res/
+3、此步骤为生成证书文件.放在最后说明
+4、将生成的证书文件(myapp.keystore)拷贝到项目中android/app文件夹下
+5、打开项目中android\gradle.properties文件. 复制以下内容
+   MYAPP_RELEASE_STORE_FILE=myapp.keystore
+   MYAPP_RELEASE_KEY_ALIAS=myapp-alias
+   MYAPP_RELEASE_STORE_PASSWORD=123456
+   MYAPP_RELEASE_KEY_PASSWORD=123456
+6、打开项目中android\app\build.gradle文件. 添加以下节点
+   signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+			signingConfig signingConfigs.release
+        }
+    }
+7、CD进入android文件夹, 执行命令 gradlew assembleRelease
+8、结束后会在android/app/build/outputs/apk/app-release.apk。
+
+
+生成证书
+1、打开cmd,进入JAVA JDK的bin文件夹下如
+   cd C:\Program Files\Java\jdk1.7.0_51\bin
+2、执行命令
+   keytool -genkey -v -keystore E:\myapp.keystore -alias myapp-alias -keyalg RSA -keysize 2048 -validity 10000
+   然后根据提示输入密码和确认密码   (密码看不到,但是键盘可以输入)
+   公司、姓名等等可以随便写
+   需要确认时,输入y,回车
+3、再输入秘钥密码和确认密码
+
+生成的证书文件会在E盘下  (因为-keystore指定了 E:\myapp.keystore)
+

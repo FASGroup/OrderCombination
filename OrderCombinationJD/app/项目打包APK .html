@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html> 
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>项目打包APK</title>
+
+</head>
+
+  <body lang="zh-CN" class="reader-black-font">
+
+
+    
+<div class="note">
+  <div class="post">
+    <div class="article">
+        <h1 class="title">项目打包APK</h1>
+
+        <div class="show-content">
+          <p>打包流程：</p>
+<h3>
+	打包前准备
+</h3>
+<pre>
+a: 找到<code>java jdk</code>路径(默认是在<code>C:\Program Files\Java\jdk1.7.0_51\bin</code>)
+   确保此文件夹中有<code>keytool.exe </code>
+b: 打开cmd, 进入项目目录
+   <code>cd xxxxxx\OrderCombinationJD</code>
+   输入<code>mkdir -p  android\app\src\main\assets</code>
+   回车 (这个如果以前执行过，就不需要在执行了)
+c: 想好证书信息(后面会用到)
+   证书文件名=myapp.keystore
+   证书别名=myapp-alias
+   证书密码=123456
+   秘钥密码=123456
+
+</pre>
+		  
+<h3>1,  产生签名的key</h3>
+
+<pre><code>
+a、打开cmd,进入JAVA JDK的bin文件夹下如
+   cd C:\Program Files\Java\jdk1.7.0_51\bin
+b、执行命令
+   keytool -genkey -v -keystore E:\myapp.keystore -alias myapp-alias -keyalg RSA -keysize 2048 -validity 10000
+   然后根据提示输入密码和确认密码   (密码看不到,但是键盘可以输入)
+   公司、姓名等等可以随便写
+   需要确认时,输入y,回车
+c、再输入秘钥密码和确认密码
+d、将生成的证书文件(myapp.keystore)拷贝到项目中android/app文件夹下
+
+生成的证书文件会在E盘下  (因为-keystore指定了 E:\myapp.keystore)
+
+</code></pre>
+
+<h3>2,  打包项目JS文件</h3>
+<pre>
+打开cmd,进入项目目录 <code>cd xxxxxx\OrderCombinationJD</code>
+执行<code>react-native bundle --platform android --dev false --entry-file index.android.js \   --bundle-output android/app/src/main/assets/index.android.bundle \ --assets-dest android/app/src/main/res/</code>
+</pre>
+
+<h3>3, 修改<code>android/gradle.properties</code>文件，增加如下</h3>
+<pre><code>MYAPP_RELEASE_STORE_FILE=<font color="red">myapp.keystore</font>
+MYAPP_RELEASE_KEY_ALIAS=<font color="red">myapp-alias</font>
+MYAPP_RELEASE_STORE_PASSWORD=<font color="red">123456</font>
+MYAPP_RELEASE_KEY_PASSWORD=<font color="red">123456</font>
+
+<font color="red">* [注意红色部分为你自己设置的密钥和存储密码(注意不要写多空格)]</font></code></pre>
+<h3>4, 修改<code>android/app/build.gradle</code>文件中的签名配置：</h3>
+<pre><code>...
+android { 
+  ... 
+  defaultConfig { 
+    ... 
+  } 
+  signingConfigs { 
+    release { 
+        storeFile file(MYAPP_RELEASE_STORE_FILE) 
+        storePassword MYAPP_RELEASE_STORE_PASSWORD 
+        keyAlias MYAPP_RELEASE_KEY_ALIAS 
+        keyPassword MYAPP_RELEASE_KEY_PASSWORD 
+    } 
+  } 
+  buildTypes { 
+    release { 
+      ... 
+      signingConfig signingConfigs.release 
+    } 
+  }
+}</code></pre>
+<h3>5, 然后进入android目录执行如下：</h3>
+<pre><code>gradlew assembleRelease</code></pre>
+<p>结束后会在<code>android/app/build/outputs/apk/app-release.apk</code>。</p>
+
+
+        </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+  </body>
+</html>
