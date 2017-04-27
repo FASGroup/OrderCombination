@@ -12,7 +12,10 @@ import JDIndex from '../ui/JDIndex'
 import JDUserInfo from '../ui/JDUserInfo'
 import JDUserInfoEdit  from '../ui/JDUserInfoEdit'
 import shoppingCar from '../ui/shoppingCar'
+import JDAddressEdit from '../ui/JDAddressEdit'
+import JDAddOrder from '../ui/JDAddOrder'
 import JDMergeOrder from '../ui/JDMergeOrder'
+
 
 export default class AppNavigator extends Component {
     render(){
@@ -23,6 +26,8 @@ export default class AppNavigator extends Component {
             JDUserInfo:JDUserInfo,
             JDUserInfoEdit:JDUserInfoEdit,
             shoppingCar:shoppingCar,
+            JDAddressEdit:JDAddressEdit,
+            JDAddOrder:JDAddOrder,
             JDMergeOrder:JDMergeOrder,
         };
 
@@ -37,7 +42,8 @@ export default class AppNavigator extends Component {
                     if(Component){
                         return <Component {...route.params} navigator={navigator} />
                     }
-                }}
+                }
+                }
             />
         )
     }

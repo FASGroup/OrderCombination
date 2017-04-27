@@ -18,6 +18,7 @@ import {
   RefreshControl
 }
   from 'react-native';
+
 import AppCore from '../app.core';
 import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
@@ -53,7 +54,6 @@ export default class JDIndex extends Component {
   }
 
   _turnToJDUserPage() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'JDUserInfo'
@@ -70,8 +70,7 @@ export default class JDIndex extends Component {
     }
   }
 
-  _turnToJDShppingCarPage() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+  _turnToJDShppingCarPage() { 
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'shoppingCar'
@@ -79,34 +78,25 @@ export default class JDIndex extends Component {
     }
   }
 
-  _turnToJDMergeOrder() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+//点击新增按钮去到新增页面
+ _turnToAddOrderPage() { 
     if (this.props.navigator) {
       this.props.navigator.push({
-        name: 'JDMergeOrder',
-        params:{mergeid:"141736C2-434E-4FCA-8A34-80EE9841A6F0"}
+        name: 'JDAddOrder'
       });
     }
   }
+
 
   render() {
     var navigationView = (
       <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { { this._turnToJDShppingCarPage() } }}>
-          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>少辉页面</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { { this._turnToJDMergeOrder() } }}>
-          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单结果</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>
-          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>收货地址</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
         <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
         </TouchableOpacity>
@@ -161,10 +151,10 @@ export default class JDIndex extends Component {
           <View style={styles.foot}>
             <View style={styles.footButton}>
               <TouchableHighlight
-                onPress={() => { Alert.alert("点击了新增"); }}
+                onPress={() => {{this._turnToAddOrderPage()}}}
                 style={styles.footButtonColor}
-                underlayColor="gainsboro"
-              ><Text style={styles.footButtonFontColor}>新增</Text>
+                underlayColor="gainsboro">
+              <Text style={styles.footButtonFontColor}>新增</Text>
               </TouchableHighlight>
             </View>
             <View style={styles.footButton}>
@@ -188,6 +178,7 @@ export default class JDIndex extends Component {
 
   async refreshData() {
     //this.refs.dialog.showWaiting();
+
     this.setState({ isRefreshing: true });
     let data = await AppCore.send('api/Order/GetUnMergeList');
     this.setState({ dataSource: this.ds.cloneWithRows(data) });
@@ -222,16 +213,17 @@ export default class JDIndex extends Component {
   async mergeOrder() {
     this.refs.dialog.showWaiting();
     let currentUser = await AppCore.getUser();
-    let megerModel = await AppCore.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
+
+    //Alert.alert(currentUser.id+'000');
+
+    let mergerModel = await AppCore.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
     this.refs.dialog.hideWaiting();
-    if (!megerModel.mergeId) {
-
+    if (!mergerModel.mergeId) {
       AppCore.showMessage("没有可以合并的订单");
-
     } else {
       this.props.navigator.push({
-        name: 'JDUserInfoEdit',
-        params: { mergeid: megerModel.megerGuid }
+        name: 'JDMergeOrder',
+        params: { mergeid:mergerModel.mergeId}
       });
     }
   }

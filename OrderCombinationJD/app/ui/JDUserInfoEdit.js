@@ -13,23 +13,19 @@ import {
    Alert,
   } 
 from 'react-native';
-
-//import FirstPageComponent from './FirstPageComponent';
-
  
 export default class ThirdPageComponent extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {};
     }
 
+      //返回按钮事件  
      _pressBackButton() {
          if(this.props.navigator){
-            // this.props.navigator.push({
-            //     name: 'JDUserInfo'
-            // });
-            this.props.navigator.pop();
+            this.props.navigator.push({
+                name: 'JDUserInfo'
+            });
         }
     }
     
@@ -40,36 +36,10 @@ export default class ThirdPageComponent extends React.Component {
         }
     } 
     
+    //保存按钮事件
     _pressButton_Save(){
-        const{navigator}=this.props; 
-    } 
-    
-    _turnToJDUserPage (){
-        //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDUserInfo'
-            });
-        }
-    }   
-      _turnToJDIndexPage (){
-        //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDIndex'
-            });
-        }
-    }
-    
-     _turnToJDShppingCarPage (){
-        //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
-        }
-    }
-
+        Alert.alert('保存成功','保存成功');
+    }  
     render() {
     return ( 
                    <View style={styles.container}>   
@@ -82,7 +52,6 @@ export default class ThirdPageComponent extends React.Component {
                                </TouchableHighlight>
                           </View>
                           
-                       
                           <View style={{flex:4,justifyContent:'center',}}> 
                                 <Text style={{fontSize:18,alignSelf:'center'}}>
                                   填写个人信息
@@ -90,16 +59,15 @@ export default class ThirdPageComponent extends React.Component {
                          </View>
                          
                          <View style={{flex:1,justifyContent:'center',marginRight:8}}>
-                             <TouchableHighlight  onPress={()=>Alert.alert('保存成功','保存成功')}>
+                             <TouchableHighlight  onPress={()=>this._pressButton_Save()}>
                                 <Text style={{fontSize:18,color:'red'}}>
                                     保存 
                                 </Text> 
                             </TouchableHighlight>
                           </View>
                      </View>
-               
                     
-                            <View style={{flex:1,flexDirection:'row',borderBottomColor: '#c1b4b457',borderBottomWidth:0.5}}>
+                    <View style={{flex:1,flexDirection:'row',borderBottomColor: '#c1b4b457',borderBottomWidth:0.5}}>
                                     <View style={{flex:1,justifyContent:'center',marginLeft:10}}>
                                         <Text>
                                             头像
@@ -134,11 +102,9 @@ export default class ThirdPageComponent extends React.Component {
                             </View>
                             
                             <View style={{flex:6}}>
-                                
                             </View>
-                       
              </View>
-    );
+            );
     }
 }
 
@@ -158,7 +124,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         borderBottomColor:'#c1b4b457',
         borderBottomWidth:0.5,
-        
     }
     
 });
