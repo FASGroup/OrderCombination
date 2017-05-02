@@ -117,6 +117,32 @@ namespace OrderCombinationWebApi.Controllers
                  return model;
             }
         }
+        
+        [HttpGet]
+        [Route("GetHistoryOrder")]
+        public async Task<MergeOrder> GetHistoryOrder(string ConditionID)
+        {
+            //所有记录
+            if (ConditionID == "1")
+            {
+                var result = await this.orderCombinationDbContext.OrderInfos
+                 .AsNoTracking().ToListAsync();
+                return result;
+            }
+            else if (ConditionID == "2") //当天记录
+            {
+                var result = await this.orderCombinationDbContext.OrderInfos
+                 .Where(a => a.CreateDate.DayOfYear == DateTime.Now.DayOfNow).AsNoTracking().ToListAsync();
+                return result;
+            }
+            else if (ConditionID == "3") //本月记录
+            {
+                var result = await this.orderCombinationDbContext.OrderInfos
+                 .Where(a => a.CreateDate.Month == DateTime.Now.Month).AsNoTracking().ToListAsync();
+                return result;
+
+            }
+        }
 
     }
 }
