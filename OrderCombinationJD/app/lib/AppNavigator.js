@@ -15,6 +15,7 @@ import shoppingCar from '../ui/shoppingCar'
 import JDAddressEdit from '../ui/JDAddressEdit'
 import JDAddOrder from '../ui/JDAddOrder'
 import JDMergeOrder from '../ui/JDMergeOrder'
+import JDQueryHistory from '../ui/JDQueryHistory'
 
 
 export default class AppNavigator extends Component {
@@ -29,6 +30,7 @@ export default class AppNavigator extends Component {
             JDAddressEdit:JDAddressEdit,
             JDAddOrder:JDAddOrder,
             JDMergeOrder:JDMergeOrder,
+            JDQueryHistory:JDQueryHistory,
         };
 
         let [defaultName, defaultComponent] = ['LoginView',LoginView];
