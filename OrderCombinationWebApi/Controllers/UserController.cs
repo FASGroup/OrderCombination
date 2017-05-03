@@ -59,6 +59,7 @@ namespace OrderCombinationWebApi.Controllers
         //测试方法
         [HttpGet]
         [Route("GetTestList")]
+         [AllowAnonymous]
         public OperateResult GetTestList()
         {
             List<string> data = new List<string>(){
