@@ -17,6 +17,7 @@ import {
   Platform,
   RefreshControl
 } from 'react-native';
+
 import AppCore from '../app.core';
 import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
