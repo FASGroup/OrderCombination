@@ -66,6 +66,14 @@ export default class JDAddressEdit extends React.Component {
         }
     }
 
+  _turnToJDOrderHostoryPage() { 
+    if (this.props.navigator) {
+      this.props.navigator.push({
+        // name: 'JDQueryHistory'
+         name:'JDOrderHistory'
+      });
+    }
+  }
       _turnToJDIndexPage (){ 
         if(this.props.navigator){
             this.props.navigator.push({
@@ -82,20 +90,20 @@ export default class JDAddressEdit extends React.Component {
         }
     }
     //--------------end------------
-    render() {
-        //左边抽屉菜单效果
-        var navigationView = (
-            <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
-                 <TouchableOpacity onPress={()=>{{this._turnToJDIndexPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{{this._turnToJDIndexPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{{this._turnToJDUserPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
-                </TouchableOpacity>
-            </View>)
+    
+  render() {
+    var navigationView = (
+      <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
+        <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
+          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
+        </TouchableOpacity> 
+        <TouchableOpacity onPress={() => { { this._turnToJDOrderHostoryPage() } }}>
+          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
+        </TouchableOpacity> 
+        <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>
+          <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
+        </TouchableOpacity>
+      </View>)
         return (
             <DrawerLayoutAndroid
                 drawerWidth={150}

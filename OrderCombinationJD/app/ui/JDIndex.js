@@ -41,18 +41,7 @@ export default class JDIndex extends Component {
     }
   }
 
-  _pressButton1() {
-    const { navigator } = this.props;
-    //<Component {...route.params} navigator={navigator} />
-    //这里传递了navigator作为props
-    if (navigator) {
-      navigator.push({
-        // name: 'CoudanIndexPageComponent',
-        //component: CoudanIndexPageComponent,
-      })
-    }
-  }
-
+   
   _turnToJDUserPage() {
     if (this.props.navigator) {
       this.props.navigator.push({
@@ -66,6 +55,15 @@ export default class JDIndex extends Component {
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'JDIndex'
+      });
+    }
+  }
+
+  _turnToJDOrderHostoryPage() { 
+    if (this.props.navigator) {
+      this.props.navigator.push({
+        // name: 'JDQueryHistory'
+         name:'JDOrderHistory'
       });
     }
   }
@@ -94,7 +92,7 @@ export default class JDIndex extends Component {
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
         </TouchableOpacity> 
-        <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
+        <TouchableOpacity onPress={() => { { this._turnToJDOrderHostoryPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
         </TouchableOpacity> 
         <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>

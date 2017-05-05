@@ -15,15 +15,16 @@ import {
   ListView
 }
   from 'react-native';
-var App = require('../app.core');
+
+import AppCore from '../app.core';
 import ActivityIndicatorComponent from '../lib/ActivityIndicatorComponent';
 
 var Dimensions = require('Dimensions');
 
-export default class JDMergeOrder extends Component {
+export default class JDOrderHistory extends Component {
   constructor(props) {
     super(props);
-    console.log(props.mergeid);
+   // console.log(props.mergeid);
 
     this.state = {
       dataSource: this.ds.cloneWithRows([]),
@@ -39,16 +40,16 @@ export default class JDMergeOrder extends Component {
     }
   }
 
-  //-------------菜单操作按钮事件-------------
-    _turnToJDUserPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDUserInfo'
-            });
-        }
-    }
 
-  _turnToJDOrderHostoryPage() { 
+  _turnToJDUserPage() {
+    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+    if (this.props.navigator) {
+      this.props.navigator.push({
+        name: 'JDUserInfo'
+      });
+    }
+  }
+   _turnToJDOrderHostoryPage() { 
     if (this.props.navigator) {
       this.props.navigator.push({
         // name: 'JDQueryHistory'
@@ -56,24 +57,18 @@ export default class JDMergeOrder extends Component {
       });
     }
   }
-      _turnToJDIndexPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDIndex'
-            });
-        }
+  _turnToJDIndexPage() {
+    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+    if (this.props.navigator) {
+      this.props.navigator.push({
+        name: 'JDIndex'
+      });
     }
+  }
 
-     _turnToJDShppingCarPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
-        }
-    }
-    //--------------end------------
+   
 
-  render() {
+ render() {
     var navigationView = (
       <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
@@ -101,15 +96,12 @@ export default class JDMergeOrder extends Component {
                              </Text>
               </TouchableHighlight>
             </View>
-
             <View style={{ flex: 4, justifyContent: 'center', }}>
               <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                凑单结果
+                凑单历史记录
                                 </Text>
-            </View>
-
-            <View style={{ flex: 1, justifyContent: 'center', marginRight: 8 }}>
-              
+            </View> 
+            <View style={{ flex: 1, justifyContent: 'center', marginRight: 8 }}> 
             </View>
           </View>
 
@@ -132,9 +124,11 @@ export default class JDMergeOrder extends Component {
 
   async refreshData() {
     console.log(this.props.mergeid);
+    let currentUser = await AppCore.getUser();
+
     this.refs.dialog.showWaiting();
-    let data = await App.send('api/Order/GetMergeOrder', { method: "GET", data: { mergeid: this.props.mergeid }});
-    this.setState({ dataSource: this.ds.cloneWithRows(data.mergeOrderList) });
+    let data = await AppCore.send('api/Order/GetMergeOrderHostory1', { method: "GET", data: { userId: currentUser.id  }});
+    this.setState({ dataSource: this.ds.cloneWithRows(data) });
     this.refs.dialog.hideWaiting();
   }
 

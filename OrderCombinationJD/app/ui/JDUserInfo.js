@@ -87,168 +87,176 @@ export default class JDUserInfo extends React.Component {
         }
     }
 
-      _turnToJDIndexPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDIndex'
-            });
+    _turnToJDOrderHostoryPage() { 
+        if (this.props.navigator) {
+        this.props.navigator.push({
+            // name: 'JDQueryHistory'
+            name:'JDOrderHistory'
+        });
         }
     }
+        _turnToJDIndexPage (){ 
+            if(this.props.navigator){
+                this.props.navigator.push({
+                    name: 'JDIndex'
+                });
+            }
+        }
 
-     _turnToJDShppingCarPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
+        _turnToJDShppingCarPage (){ 
+            if(this.props.navigator){
+                this.props.navigator.push({
+                    name: 'shoppingCar'
+                });
+            }
         }
-    }
-    //--------------end------------
-    render() {
-        //左边抽屉菜单效果
+        //--------------end------------
+        render() {
         var navigationView = (
-            <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
-                 <TouchableOpacity onPress={()=>{{this._turnToJDIndexPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{{this._turnToJDIndexPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity onPress={()=>{{this._turnToJDUserPage()}}}>
-                    <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
-                </TouchableOpacity>
-            </View>)
-        return (
-            <DrawerLayoutAndroid
-                drawerWidth={150}
-                drawerPosition={DrawerLayoutAndroid.positions.Left}
-                renderNavigationView={() => navigationView}> 
+        <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
+            <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
+            <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity onPress={() => { { this._turnToJDOrderHostoryPage() } }}>
+            <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单记录</Text>
+            </TouchableOpacity> 
+            <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>
+            <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
+            </TouchableOpacity>
+        </View>)
 
-                <View style={styles.container}>
-                    <View style={styles.Texttitle}>
-                       
-                        <View style={styles.BackButtonViewStyle}>
-                         <TouchableOpacity onPress={()=>{{this._pressBackButton()}}}>
-                            <Text style={{ fontSize: 18, color: 'red' }}>
-                                返回
-                             </Text>
-                              </TouchableOpacity>
-                        </View>
+            return (
+                <DrawerLayoutAndroid
+                    drawerWidth={150}
+                    drawerPosition={DrawerLayoutAndroid.positions.Left}
+                    renderNavigationView={() => navigationView}> 
 
-                        <View style={styles.ViewUserInfoTitleStyle}>
-                            <TouchableOpacity>
-                                <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                                    个人信息
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.ViewSaveButtonStyle}>
-                            <TouchableOpacity 
-                                onPress={() => this.SaveUserInfo()}>
+                    <View style={styles.container}>
+                        <View style={styles.Texttitle}>
+                        
+                            <View style={styles.BackButtonViewStyle}>
+                            <TouchableOpacity onPress={()=>{{this._pressBackButton()}}}>
                                 <Text style={{ fontSize: 18, color: 'red' }}>
-                                    保存
+                                    返回
                                 </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.ViewUserInfoTitleStyle}>
+                                <TouchableOpacity>
+                                    <Text style={{ fontSize: 18, alignSelf: 'center' }}>
+                                        个人信息
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.ViewSaveButtonStyle}>
+                                <TouchableOpacity 
+                                    onPress={() => this.SaveUserInfo()}>
+                                    <Text style={{ fontSize: 18, color: 'red' }}>
+                                        保存
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <View style={styles.ViewTouxianStyle}>
+                            <View style={styles.ViewtouxianTextStyle}>
+                                <Text>  头像 </Text>
+                            </View>
+                        <View style={styles.ViewNameTextStyle}>
+                                <Image source={require('../res/images/q.png')} />
+                            </View>
+                        </View>
+
+                        <View style={styles.ViewTouxianStyle}>
+                            <View style={styles.ViewtouxianTextStyle}>
+                                <Text>  昵称：  </Text>
+                            </View>
+                            <View style={styles.ViewNameTextStyle}>
+                            <TextInput  value={this.state.username}
+                                        onChangeText={(text) => this.setState({username: text})}/>  
+                            </View>
+                        </View>
+
+                        <View style={styles.ViewTouxianStyle}>
+                            <View style={styles.ViewtouxianTextStyle}>
+                                <Text>  密码:  </Text>
+                            </View>
+                            <View style={styles.ViewNameTextStyle}>
+                            <TextInput  value={this.state.password}
+                                onChangeText={(text) => this.setState({password: text})}  
+                                /> 
+                            </View>
+                        </View>
+                        
+                        <View style={styles.ViewTouxianStyle}>
+                            <View style={styles.ViewtouxianTextStyle}>
+                                <Text>  邮箱: </Text>
+                            </View>
+                        <View style={styles.ViewNameTextStyle}>
+                                <TextInput value={this.state.userId+''}  /> 
+                            </View>
+                        </View>
+                        <View style={{height:320}}>
+                            <View >
+                                <Text>  收货地址: </Text>
+                            </View>
+                        <View style={{height:320}}>
+                                <ScrollView style={styles.ScrollViewStyle}>
+                                        <ListView dataSource={this.state.dataSource}
+                                            renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}
+                                            refreshControl={<RefreshControl
+                                                refreshing={this.state.isRefreshing}
+                                                onRefresh={this.refreshData.bind(this)}  />}>
+                                            </ListView> 
+                                </ScrollView>
+                            </View>
+                        </View>
+                        <View>
+                            <TouchableOpacity style={styles.NewAddressButtonViewStyle}
+                                onPress={()=>{{this._pressNewAddressButton()}}}>
+                                <Text style={styles.NewAddressButtonStyle} > + 新建地址 </Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-
-                    <View style={styles.ViewTouxianStyle}>
-                        <View style={styles.ViewtouxianTextStyle}>
-                            <Text>  头像 </Text>
-                        </View>
-                       <View style={styles.ViewNameTextStyle}>
-                            <Image source={require('../res/images/q.png')} />
-                        </View>
-                    </View>
-
-                    <View style={styles.ViewTouxianStyle}>
-                        <View style={styles.ViewtouxianTextStyle}>
-                            <Text>  昵称：  </Text>
-                        </View>
-                        <View style={styles.ViewNameTextStyle}>
-                         <TextInput  value={this.state.username}
-                                    onChangeText={(text) => this.setState({username: text})}/>  
-                        </View>
-                    </View>
-
-                    <View style={styles.ViewTouxianStyle}>
-                        <View style={styles.ViewtouxianTextStyle}>
-                            <Text>  密码:  </Text>
-                        </View>
-                        <View style={styles.ViewNameTextStyle}>
-                         <TextInput  value={this.state.password}
-                             onChangeText={(text) => this.setState({password: text})}  
-                             /> 
-                        </View>
-                    </View>
-                    
-                     <View style={styles.ViewTouxianStyle}>
-                        <View style={styles.ViewtouxianTextStyle}>
-                            <Text>  邮箱: </Text>
-                        </View>
-                       <View style={styles.ViewNameTextStyle}>
-                            <TextInput value={this.state.userId+''}  /> 
-                        </View>
-                    </View>
-                    <View style={{height:320}}>
-                        <View >
-                            <Text>  收货地址: </Text>
-                        </View>
-                       <View style={{height:320}}>
-                             <ScrollView style={styles.ScrollViewStyle}>
-                                    <ListView dataSource={this.state.dataSource}
-                                        renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}
-                                        refreshControl={<RefreshControl
-                                            refreshing={this.state.isRefreshing}
-                                            onRefresh={this.refreshData.bind(this)}  />}>
-                                        </ListView> 
-                            </ScrollView>
-                        </View>
-                    </View>
-                    <View>
-                        <TouchableOpacity style={styles.NewAddressButtonViewStyle}
-                            onPress={()=>{{this._pressNewAddressButton()}}}>
-                            <Text style={styles.NewAddressButtonStyle} > + 新建地址 </Text>
-                        </TouchableOpacity>
-                    </View>
-        </View>
-            </DrawerLayoutAndroid>
-        );
-    }
-
-     //删除地址按钮事件
-    async _pressDeleteAddress(Id)
-    {
-       // Alert.alert('6789');
-        this.setState({ isRefreshing: true }); 
-        let AddressModel = await AppCore.send('api/Address/DeleteAddressByID',{method:"GET",data:{Id:Id}});  
-
-        if (AddressModel.id>0) {
-            AppCore.showMessage("删除成功！"); 
+            </View>
+                </DrawerLayoutAndroid>
+            );
         }
-        else{
-             AppCore.showMessage("删除失败！"); 
-        }
-        this.setState({ isRefreshing: true });
-        this.setState({ isRefreshing: false });
-    }
- 
-    //根据ID获取一条地址信息记录
-    async GetUserByUserID()
-    { 
-        let currentUser = await AppCore.getUser();  
-       // let UserModel = await AppCore.send("api/User/GetUserInfoByID", { method: "GET", data:  { Id: currentUser.id}});
-      this.setState({    
-               userId:currentUser.id,
-               username:currentUser.userName,   
-               password:currentUser.password,  
-               });  
-    }
 
- async componentDidMount() {
-    await this.refreshData();
-    await this.GetUserByUserID();
-  }
+        //删除地址按钮事件
+        async _pressDeleteAddress(Id)
+        {
+        // Alert.alert('6789');
+            this.setState({ isRefreshing: true }); 
+            let AddressModel = await AppCore.send('api/Address/DeleteAddressByID',{method:"GET",data:{Id:Id}});  
+
+            if (AddressModel.id>0) {
+                AppCore.showMessage("删除成功！"); 
+            }
+            else{
+                AppCore.showMessage("删除失败！"); 
+            }
+            this.setState({ isRefreshing: true });
+            this.setState({ isRefreshing: false });
+        }
+    
+        //根据ID获取一条地址信息记录
+        async GetUserByUserID()
+        { 
+            let currentUser = await AppCore.getUser();  
+        // let UserModel = await AppCore.send("api/User/GetUserInfoByID", { method: "GET", data:  { Id: currentUser.id}});
+        this.setState({    
+                userId:currentUser.id,
+                username:currentUser.userName,   
+                password:currentUser.password,  
+                });  
+        }
+
+    async componentDidMount() {
+        await this.refreshData();
+        await this.GetUserByUserID();
+    }
 
    //获得当前用户的收货地址
     async refreshData() { 
