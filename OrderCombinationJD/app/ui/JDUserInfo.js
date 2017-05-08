@@ -32,6 +32,7 @@ export default class JDUserInfo extends React.Component {
             username: null,
             userId:null ,
             password:null,
+            email:null,
             isRefreshing:false,
             falseSwitchIsOn:true
         };   
@@ -79,38 +80,32 @@ export default class JDUserInfo extends React.Component {
     } 
      
      //-------------菜单操作按钮事件-------------
-    _turnToJDUserPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'JDUserInfo'
-            });
+        _turnToJDUserPage (){ 
+            if(this.props.navigator){
+                this.props.navigator.push({
+                    name: 'JDUserInfo'
+                });
+            }
         }
-    }
 
-    _turnToJDOrderHostoryPage() { 
-        if (this.props.navigator) {
-        this.props.navigator.push({
-            // name: 'JDQueryHistory'
-            name:'JDOrderHistory'
-        });
+        _turnToJDOrderHostoryPage() { 
+            if (this.props.navigator) {
+            this.props.navigator.push({
+                // name: 'JDQueryHistory'
+                name:'JDOrderHistory'
+            });
+            }
         }
-    }
+
         _turnToJDIndexPage (){ 
             if(this.props.navigator){
                 this.props.navigator.push({
                     name: 'JDIndex'
                 });
             }
-        }
-
-        _turnToJDShppingCarPage (){ 
-            if(this.props.navigator){
-                this.props.navigator.push({
-                    name: 'shoppingCar'
-                });
-            }
-        }
+        } 
         //--------------end------------
+
         render() {
         var navigationView = (
         <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
@@ -195,7 +190,7 @@ export default class JDUserInfo extends React.Component {
                                 <Text>  邮箱: </Text>
                             </View>
                         <View style={styles.ViewNameTextStyle}>
-                                <TextInput value={this.state.userId+''}  /> 
+                                <TextInput value={this.state.email+''}  /> 
                             </View>
                         </View>
                         <View style={{height:320}}>
@@ -227,31 +222,35 @@ export default class JDUserInfo extends React.Component {
         //删除地址按钮事件
         async _pressDeleteAddress(Id)
         {
-        // Alert.alert('6789');
             this.setState({ isRefreshing: true }); 
             let AddressModel = await AppCore.send('api/Address/DeleteAddressByID',{method:"GET",data:{Id:Id}});  
 
             if (AddressModel.id>0) {
-                AppCore.showMessage("删除成功！"); 
+                AppCore.showMessage("删除成功！");  
             }
             else{
                 AppCore.showMessage("删除失败！"); 
             }
+
             this.setState({ isRefreshing: true });
             this.setState({ isRefreshing: false });
         }
     
-        //根据ID获取一条地址信息记录
-        async GetUserByUserID()
-        { 
-            let currentUser = await AppCore.getUser();  
-        // let UserModel = await AppCore.send("api/User/GetUserInfoByID", { method: "GET", data:  { Id: currentUser.id}});
+    //获取当前用户的信息
+    async GetUserByUserID()
+    { 
+        let currentUser = await AppCore.getUser();   
+        let data = await AppCore.send('api/user/GetUserInfoByID',{method:"GET",data:{Id:currentUser.id}}); 
+        //Alert.alert(data.password+'');
         this.setState({    
                 userId:currentUser.id,
                 username:currentUser.userName,   
-                password:currentUser.password,  
-                });  
-        }
+                password:data.password,  
+                email:data.address,
+         });  
+            
+        //Alert.alert(currentUser.password+'');
+    }
 
     async componentDidMount() {
         await this.refreshData();
@@ -270,33 +269,34 @@ export default class JDUserInfo extends React.Component {
     customerRenderRow(rowData) { 
         return(
         <View style={{height:100}} >
-                <View style={{height:30,flexDirection:'row',borderBottomColor: '#c1b4b457', borderBottomWidth: 0.5  }}>
-                                <Text>{rowData.consigneeName}</Text>
-                                    <Text style={{marginLeft:40}}>{rowData.phoneNumber}</Text>
+             <View style={{height:30,flexDirection:'row',borderBottomColor: '#c1b4b457', borderBottomWidth: 0.5  }}>
+                        <Text>{rowData.consigneeName}</Text>
+                        <Text style={{marginLeft:40}}>{rowData.phoneNumber}</Text>
                 </View>
                 <View style={{ height:30,borderBottomColor: '#c1b4b457', borderBottomWidth: 0.5 }}>
-                            <Text>{rowData.addressArea}</Text>  
-                            
-                    </View>
+                        <Text>{rowData.addressArea}</Text>  
+                </View>
                 <View style={{height:30,flexDirection:'row',borderBottomColor: '#c1b4b457', borderBottomWidth: 0.5 }}> 
-                                <View style={{flex:1,flexDirection:'row'}}>
-                                    <Switch disabled={false}  onValueChange={(value) => this.setState({falseSwitchIsOn: value})} />
-                                                    <Text>默认地址</Text> 
-                                            </View>
-                                            <View style={{ flex:4,flexDirection:'row',justifyContent:'flex-end'}}>
-                                                    <Image source={require('../res/images/edit.png')}/>
-                                                    <TouchableOpacity  onPress={()=>{{this._pressUpdateAddress(rowData.id)}}}>
-                                                        <Text> 修改 </Text>
-                                                    </TouchableOpacity>
-                                                    <Image source={require('../res/images/delete.png')} />
-                                                    <TouchableOpacity onPress={()=>{{this._pressDeleteAddress(rowData.id)}}}>
-                                                        <Text> 刪除 </Text>
-                                                    </TouchableOpacity>
-                                            </View> 
-                                        </View> 
-                                    </View> 
-
-        
+                     <View style={{flex:1,flexDirection:'row'}}>
+                            <Switch 
+                                disabled={false}  
+                                onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
+                                value={rowData.isAddressDefault}
+                             />
+                            <Text>默认地址</Text> 
+                            </View>
+                    <View style={{ flex:4,flexDirection:'row',justifyContent:'flex-end'}}>
+                            <Image source={require('../res/images/edit.png')}/>
+                            <TouchableOpacity  onPress={()=>{{this._pressUpdateAddress(rowData.id)}}}>
+                                <Text> 修改 </Text>
+                            </TouchableOpacity>
+                            <Image source={require('../res/images/delete.png')} />
+                            <TouchableOpacity onPress={()=>{{this._pressDeleteAddress(rowData.id)}}}>
+                                 <Text> 刪除 </Text>
+                            </TouchableOpacity>
+                    </View> 
+            </View> 
+        </View> 
         );  
     } 
   
@@ -318,6 +318,7 @@ export default class JDUserInfo extends React.Component {
                 Password:passwordstr, 
             }});
             //Alert.alert(UserModel.userId+'')
+         //todo: 保存提示   
         if (UserModel.id>0) {
             AppCore.showMessage("修改成功！");
 

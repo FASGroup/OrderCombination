@@ -33,6 +33,7 @@ export default class JDAddressEdit extends React.Component {
             PhoneNumber:null,
             AddressArea:null,
             AddressDetailed:null,
+            IsAddressDefault:true,
         };  
     }
       
@@ -74,25 +75,18 @@ export default class JDAddressEdit extends React.Component {
       });
     }
   }
-      _turnToJDIndexPage (){ 
+
+  _turnToJDIndexPage (){ 
         if(this.props.navigator){
             this.props.navigator.push({
                 name: 'JDIndex'
             });
         }
-    }
-
-     _turnToJDShppingCarPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
-        }
-    }
+  } 
     //--------------end------------
     
   render() {
-    var navigationView = (
+    /*var navigationView = (
       <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
         <TouchableOpacity onPress={() => { { this._turnToJDIndexPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>凑单首页</Text>
@@ -103,12 +97,12 @@ export default class JDAddressEdit extends React.Component {
         <TouchableOpacity onPress={() => { { this._turnToJDUserPage() } }}>
           <Text style={{ margin: 20, fontSize: 20, color: '#aabcc1', textAlign: 'left' }}>个人信息</Text>
         </TouchableOpacity>
-      </View>)
+      </View>)*/
         return (
-            <DrawerLayoutAndroid
+            /*<DrawerLayoutAndroid
                 drawerWidth={150}
                 drawerPosition={DrawerLayoutAndroid.positions.Left}
-                renderNavigationView={() => navigationView}>
+                renderNavigationView={() => navigationView}>*/
 
                 <View style={styles.container}>
                     <View style={styles.Texttitle}>
@@ -137,8 +131,9 @@ export default class JDAddressEdit extends React.Component {
                         </View>
                         <View style={styles.ViewNameTextStyle}>
                               <TextInput 
+                                maxLength={100}
                                 value={this.state.ConsigneeName}
-                               onChangeText={(text) => this.setState({ConsigneeName: text})}/> 
+                                onChangeText={(text) => this.setState({ConsigneeName: text})}/> 
                             </View>
                     </View>
                     
@@ -148,8 +143,11 @@ export default class JDAddressEdit extends React.Component {
                         </View>
                        <View style={styles.ViewNameTextStyle}>
                             <TextInput   
+                             keyboardType='numeric'
+                             maxLength={11}
+                             ref="PhoneNumber"
                             value={this.state.PhoneNumber}
-                            onChangeText={(text) => this.setState({PhoneNumber: text})}/>  
+                            onChangeText={(text) => this.setState({PhoneNumber: this.chkphonenumber(text)})}/>  
                         </View>
                     </View>
 
@@ -159,6 +157,7 @@ export default class JDAddressEdit extends React.Component {
                         </View>
                        <View style={styles.ViewNameTextStyle}>
                             <TextInput   
+                            maxLength={200}
                             value={this.state.AddressArea}
                             onChangeText={(text) => this.setState({AddressArea: text})}/>  
                         </View>
@@ -170,8 +169,20 @@ export default class JDAddressEdit extends React.Component {
                         </View>
                        <View style={styles.ViewNameTextStyle}>
                             <TextInput   
+                            maxLength={200}
                             value={this.state.AddressDetailed}
                             onChangeText={(text) => this.setState({AddressDetailed: text})}/> 
+                        </View>
+                    </View>
+                     <View style={styles.ViewTouxianStyle}>
+                        <View style={styles.ViewtouxianTextStyle}>
+                            <Text>  是否设置默认地址: </Text>
+                        </View>
+                       <View style={styles.ViewNameTextStyle}>
+                            <Switch 
+                                onValueChange={(value)=>{this.setState({isAddressDefault:value})}}
+                                value={this.state.isAddressDefault}
+                             />
                         </View>
                     </View>
                     
@@ -180,12 +191,25 @@ export default class JDAddressEdit extends React.Component {
                             onPress={()=>this.AddNewAddress()}>
                             <Text style={styles.NewAddressButtonStyle} >保存</Text>
                         </TouchableOpacity>
-
                     </View>
-
         </View>
-            </DrawerLayoutAndroid>
+            // </DrawerLayoutAndroid>
         );
+    }
+
+      //验证数量的输入
+    chkphonenumber(obj) {   
+       var reg = new RegExp("^[0-9]*$");   
+       if(!reg.test(obj)){
+           Alert.alert("验证提示","请输入一个正确的电话号码!");
+           //清除输入的内容
+           this.refs.PhoneNumber.clear();
+           obj=null;
+           return obj;
+        }
+        else { 
+            return obj;  
+        } 
     }
 
     async componentDidMount() { 
@@ -198,21 +222,20 @@ export default class JDAddressEdit extends React.Component {
         let id=this.props.Id; 
        if(id>0)
        {
-        this.setState({AddressDetailed:id+''})
-        let AddressModel = await AppCore.send("api/Address/GetAddressByID", { method: "GET", data:  { Id: id}});
-        //var m=JSON.stringify(AddressModel); 
-       // Alert.alert(AddressModel.consigneeName);
-        this.setState({   
+            this.setState({AddressDetailed:id+''})
+            let AddressModel = await AppCore.send("api/Address/GetAddressByID", { method: "GET", data:  { Id: id}});
+            // Alert.alert(AddressModel.consigneeName);
+            this.setState({   
                 id:id,
                 userId:AddressModel.userId,  
                 ConsigneeName:AddressModel.consigneeName,  
                 PhoneNumber:AddressModel.phoneNumber,  
                 AddressArea:AddressModel.addressArea, 
                 AddressDetailed:AddressModel.addressDetailed,  
+                isAddressDefault:AddressModel.isAddressDefault,
                 });  
         }
     }
-
 
     //保存事件
     async AddNewAddress() {
@@ -225,7 +248,34 @@ export default class JDAddressEdit extends React.Component {
         let AddressAreastr=this.state.AddressArea;
         let AddressDetailedstr=this.state.AddressDetailed;
         let Id=this.state.id;
+        let isAddressDefault=this.state.isAddressDefault;
 
+        //输入验证
+        if(ConsigneeNamestr==null||ConsigneeNamestr=='')
+        {
+              Alert.alert('验证提示','收货人名称必填！');
+              return;
+        }
+
+         if(PhoneNumberstr==null||PhoneNumberstr=='')
+        {
+              Alert.alert('验证提示','联系电话必填！');
+              return
+        }
+
+         if(AddressAreastr==null||AddressAreastr=='')
+        {
+            Alert.alert('验证提示','所属区域必填！');
+              return
+        }
+
+         if(AddressDetailedstr==null||AddressDetailedstr=='')
+        {
+            Alert.alert('验证提示','详细地址必填！');
+            return
+        }
+
+        //判断是新增还是修改
         if(Id==null)
         {
             Id=0
@@ -239,9 +289,8 @@ export default class JDAddressEdit extends React.Component {
                 PhoneNumber:PhoneNumberstr,
                 AddressArea:AddressAreastr,
                 AddressDetailed:AddressDetailedstr, 
+                isAddressDefault:isAddressDefault
             }});
-
-            //Alert.alert(AddressModel.id+'');
 
         if (AddressModel.id>0&&Id>0) {
             AppCore.showMessage("修改成功！");

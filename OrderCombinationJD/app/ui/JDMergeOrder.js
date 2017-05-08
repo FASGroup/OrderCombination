@@ -62,15 +62,7 @@ export default class JDMergeOrder extends Component {
                 name: 'JDIndex'
             });
         }
-    }
-
-     _turnToJDShppingCarPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
-        }
-    }
+    } 
     //--------------end------------
 
   render() {

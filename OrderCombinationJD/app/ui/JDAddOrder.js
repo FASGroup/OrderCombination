@@ -44,7 +44,6 @@ export default class JDAddOrder extends React.Component {
             });  
         }
 
-
     //返回按钮事件
     _pressBackButton() {
         if(this.props.navigator){ 
@@ -58,27 +57,7 @@ export default class JDAddOrder extends React.Component {
             });
         }
     } 
-
-    //保存按钮事件
-    _pressButton_SaveNewOrder() { 
-        this.refs.dialog.showWaiting();
-        
-        //let currentUser = await AppCore.getUser();
-        let CommodityName=this.state.CommodityName;
-        let CommodityUrl= this.state.CommodityUrl;
-        let Price=this.state.Price;
-        let Quantity=this.state.Quantity;
-        let Remark=this.Remark;
  
-
-        // let megerModel = await AppCore.send("api/Order/AddNewOrder", { method: "GET", data: { userId: currentUser.id } });
-        // this.refs.dialog.hideWaiting();
-        // if (true) { 
-        //      AppCore.showMessage("添加成功！");
-        // } else {
-        //      AppCore.showMessage("添加失敗！");
-        // } 
-    }
 
      //-------------菜单操作按钮事件-------------
     _turnToJDUserPage (){ 
@@ -88,31 +67,23 @@ export default class JDAddOrder extends React.Component {
             });
         }
     } 
-  _turnToJDOrderHostoryPage() { 
-    if (this.props.navigator) {
-      this.props.navigator.push({
-        // name: 'JDQueryHistory'
-         name:'JDOrderHistory'
-      });
+    _turnToJDOrderHostoryPage() { 
+        if (this.props.navigator) {
+        this.props.navigator.push({
+            // name: 'JDQueryHistory'
+            name:'JDOrderHistory'
+        });
+        }
     }
-  }
 
-      _turnToJDIndexPage (){ 
+    _turnToJDIndexPage (){ 
         if(this.props.navigator){
             this.props.navigator.push({
                 name: 'JDIndex'
             });
         }
-    }
-
-     _turnToJDShppingCarPage (){ 
-        if(this.props.navigator){
-            this.props.navigator.push({
-                name: 'shoppingCar'
-            });
-        }
-    }
-    //--------------end------------
+    } 
+  //--------------end------------
      render() {
     var navigationView = (
       <View style={{ flex: 1, height: 300, backgroundColor: '#e0f6ff' }}>
@@ -137,21 +108,16 @@ export default class JDAddOrder extends React.Component {
                     <View style={styles.Texttitle}>
                        
                         <View style={styles.BackButtonViewStyle}>
-                         <TouchableOpacity onPress={()=>{{this._pressBackButton()}}}>
-                            <Text style={{ fontSize: 18, color: 'red' }}>
-                                返回
-                             </Text>
-                              </TouchableOpacity>
+                           <TouchableOpacity onPress={()=>{{this._pressBackButton()}}}>
+                              <Text style={{ fontSize: 18, color: 'red' }}>  返回  </Text>
+                           </TouchableOpacity>
                         </View>
 
                         <View style={styles.ViewUserInfoTitleStyle}> 
-                                <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                                    添加新单
-                                </Text> 
+                             <Text style={{ fontSize: 18, alignSelf: 'center' }}> 添加新单 </Text> 
                         </View>
 
-                        <View style={styles.ViewSaveButtonStyle}>
-                            
+                        <View style={styles.ViewSaveButtonStyle}>  
                         </View>
                     </View> 
                     <View style={styles.ViewTouxianStyle}>
@@ -159,7 +125,9 @@ export default class JDAddOrder extends React.Component {
                             <Text>  商品名称:  </Text>
                         </View>
                         <View style={styles.ViewNameTextStyle}>
-                              <TextInput  onChangeText={(text) => this.setState({CommodityName: text})}/> 
+                            <TextInput  
+                                maxLength={100}
+                                onChangeText={(text) => this.setState({CommodityName: text})}/> 
                         </View>
                     </View>
                     
@@ -168,7 +136,9 @@ export default class JDAddOrder extends React.Component {
                             <Text>  链接地址: </Text>
                         </View>
                        <View style={styles.ViewNameTextStyle}>
-                            <TextInput onChangeText={(text) => this.setState({CommodityUrl: text})}/> 
+                            <TextInput 
+                                maxLength={300}
+                                onChangeText={(text) => this.setState({CommodityUrl: text})}/> 
                         </View>
                     </View>
 
@@ -177,7 +147,11 @@ export default class JDAddOrder extends React.Component {
                             <Text>  单价: </Text>
                         </View>
                        <View style={styles.ViewNameTextStyle}>
-                            <TextInput onChangeText={(text) => this.setState({Price: text})}/> 
+                            <TextInput 
+                                keyboardType='numeric' 
+                                ref="Price"
+                                onChangeText={(text) => this.setState({Price: this.chkPrice(text)})}
+                            /> 
                         </View>
                     </View>
 
@@ -186,7 +160,12 @@ export default class JDAddOrder extends React.Component {
                             <Text>  数量: </Text>
                         </View>
                        <View style={styles.ViewNameTextStyle}>
-                            <TextInput onChangeText={(text) => this.setState({Quantity: text})}/> 
+                            <TextInput 
+                                  keyboardType='numeric' 
+                                  ref="Quantity"
+                                  onChangeText={(text) => 
+                                        this.setState({Quantity: this.chkQuantity(text)})}
+                              /> 
                         </View>
                     </View>
 
@@ -195,7 +174,9 @@ export default class JDAddOrder extends React.Component {
                             <Text>  备注: </Text>
                         </View>
                        <View style={styles.ViewNameTextStyle}>
-                            <TextInput onChangeText={(text) => this.setState({Remark: text})}/> 
+                            <TextInput 
+                                maxLength={200}
+                                onChangeText={(text) => this.setState({Remark: text})}/> 
                         </View>
                     </View>
                     
@@ -204,14 +185,44 @@ export default class JDAddOrder extends React.Component {
                             onPress={()=>this.AddNewOrder()}>
                             <Text style={styles.NewAddressButtonStyle} >保存</Text>
                         </TouchableOpacity>
-
                     </View>
-
-        </View>
+            </View>
             </DrawerLayoutAndroid>
         );
     }
 
+    
+    //验证数量的输入
+    chkQuantity(obj) {   
+       var reg = new RegExp("^[0-9]*$");    
+       if(!reg.test(obj)){
+           Alert.alert("验证提示","商品数量是数字,请输入大于0的数字!");
+           //清除输入的内容
+           this.refs.Quantity.clear();
+           obj=null;
+           return obj;
+        }
+        else { 
+            return obj;  
+        } 
+    }
+    chkPrice(obj){
+        var reg = new RegExp("^[0-9]*$");     
+        //var reg = new RegExp("[1-9]\d*.\d*|0.\d*[1-9]\d*");     
+       if(!reg.test(obj)){
+           Alert.alert("验证提示","商品单价是数字,请输入大于0的数字!");
+           //清除输入的内容
+           this.refs.Price.clear();
+           obj=null;
+           return obj;
+        }
+        else { 
+            return obj;  
+        } 
+    }
+
+
+//点击保存按钮的事件
  async AddNewOrder() {
    // this.refs.dialog.showWaiting();
     //获取当前user
@@ -222,34 +233,53 @@ export default class JDAddOrder extends React.Component {
     let Pricestr=this.state.Price;
     let Quantitystr=this.state.Quantity;
     let Remarkstr=this.state.Remark;
+
+    //验证必填项
+    if(CommodityNamestr==null||CommodityNamestr=='')
+    { 
+      Alert.alert('验证提示','商品名称必填！');
+      return;
+    }
+    if(CommodityUrlstr==null||CommodityUrlstr=='')
+    { 
+      Alert.alert('验证提示','链接地址必填！');
+      return;
+    }
+    if(Pricestr==null||Pricestr==0)
+    { 
+      Alert.alert('验证提示','商品单价必填!');
+      return;
+    }
+    if(Quantitystr==null||Quantitystr==0)
+    { 
+      Alert.alert('验证提示','商品数量必填!');
+      return;
+    } 
+        //将输入的数据通过Webapi的发送到后台
+        let OrderModel = await AppCore.send("api/Order/AddNewOrder", { method: "GET", data: 
+            { 
+            userId: currentUser.id ,
+            CommodityName:CommodityNamestr,
+            CommodityUrl:CommodityUrlstr,
+            Price:Pricestr,
+            Quantity:Quantitystr,
+            Remark:Remarkstr
+            }});
     
+            this.props.navigator.push({
+            name: 'JDIndex',});
+            
+        //this.refs.dialog.hideWaiting();
+        // if (OrderModel.Id=0) {
+        //   AppCore.showMessage("新增失败！");
 
-   // Alert.alert(currentUser.id+','+CommodityName+','+','+CommodityUrl+','+Price+','+Quantity+','+Remark);
-
-    let OrderModel = await AppCore.send("api/Order/AddNewOrder", { method: "GET", data: 
-        { 
-         userId: currentUser.id ,
-         CommodityName:CommodityNamestr,
-         CommodityUrl:CommodityUrlstr,
-         Price:Pricestr,
-         Quantity:Quantitystr,
-         Remark:Remarkstr
-        }});
-  
-        this.props.navigator.push({
-        name: 'JDIndex',});
-    //this.refs.dialog.hideWaiting();
-    // if (OrderModel.Id=0) {
-    //   AppCore.showMessage("新增失败！");
-
-    // } else {
-    //     AppCore.showMessage("新增成功！");
-    //     this.props.navigator.push({
-    //     name: 'JDIndex',
-    //   });
-    
-  }
-
+        // } else {
+        //     AppCore.showMessage("新增成功！");
+        //     this.props.navigator.push({
+        //     name: 'JDIndex',
+        //   });
+        
+     } 
 }
 
 const styles = StyleSheet.create({

@@ -34,6 +34,7 @@ export default class JDIndex extends Component {
   }
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+  //返回按钮事件
   _pressButton() {
     const { navigator } = this.props;
     if (navigator) {
@@ -41,7 +42,7 @@ export default class JDIndex extends Component {
     }
   }
 
-   
+   //--------菜单栏按钮事件----start-----
   _turnToJDUserPage() {
     if (this.props.navigator) {
       this.props.navigator.push({
@@ -51,7 +52,6 @@ export default class JDIndex extends Component {
   }
 
   _turnToJDIndexPage() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'JDIndex'
@@ -67,14 +67,7 @@ export default class JDIndex extends Component {
       });
     }
   }
-
-  _turnToJDShppingCarPage() { 
-    if (this.props.navigator) {
-      this.props.navigator.push({
-        name: 'shoppingCar'
-      });
-    }
-  }
+ //-----------------end---------
 
 //点击新增按钮去到新增页面
  _turnToAddOrderPage() { 
@@ -105,29 +98,26 @@ export default class JDIndex extends Component {
         drawerWidth={150}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => navigationView}>
+
         <View style={styles.container}>
+          
           <View style={{ flex: 1, flexDirection: 'row', backgroundColor: "#05a5d1" }}>
             <View style={{ flex: 1, justifyContent: 'center', marginLeft: 8 }}>
               <TouchableHighlight onPress={this._pressButton.bind(this)}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  返回
-                             </Text>
+                <Text style={{ fontSize: 18, color: 'red' }}>  返回  </Text>
               </TouchableHighlight>
             </View>
 
             <View style={{ flex: 4, justifyContent: 'center', }}>
-              <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                京东凑单
-                                </Text>
+               <Text style={{ fontSize: 18, alignSelf: 'center' }}>  京东凑单  </Text>
             </View>
 
             <View style={{ flex: 1, justifyContent: 'center', marginRight: 8 }}>
               <TouchableHighlight onPress={() => Alert.alert('保存成功', '保存成功')}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  保存
-                                </Text>
+                <Text style={{ fontSize: 18, color: 'red' }}> 保存 </Text>
               </TouchableHighlight>
             </View>
+
           </View>
 
           <View style={styles.content}>
@@ -211,8 +201,6 @@ export default class JDIndex extends Component {
   async mergeOrder() {
     this.refs.dialog.showWaiting();
     let currentUser = await AppCore.getUser();
-
-    //Alert.alert(currentUser.id+'000');
 
     let mergerModel = await AppCore.send("api/Order/MegerOrder", { method: "GET", data: { userId: currentUser.id } });
     this.refs.dialog.hideWaiting();

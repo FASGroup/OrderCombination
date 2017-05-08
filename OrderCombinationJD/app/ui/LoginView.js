@@ -15,6 +15,7 @@ import {
 
 import TextBox from '../lib/TextBox'
 import LoginButton from '../lib/LoginButton'
+
 import App from '../app.core'
 import config from '../../app.json';  
 
@@ -39,6 +40,7 @@ export default class LoginView extends Component {
             );
     }
     async _turnToHomePage (){
+        //获取登陆名和密码
         var uobj = {
             uid : this.refs.loginuser.value(),
             pwd : this.refs.loginpwd.value(),
@@ -47,8 +49,8 @@ export default class LoginView extends Component {
         if(uobj.uid == ''){ App.showMessage('用户名不允许为空'); return;}
         if(uobj.pwd == ''){ App.showMessage('密码不允许为空'); return;}
         var obj = { UserName: uobj.uid, Password: uobj.pwd };
-		
-		let data = await App.send('api/User/GetUserInfo',{method:"POST",data:obj,timeout:5000});
+        //与数据库进行交互 验证登陆信息与数据
+		   let data = await App.send('api/User/GetUserInfo',{method:"POST",data:obj,timeout:5000});
         if(data && data.isSuccess)
         {
             App.setCache(App.const.token_key,data.data2);

@@ -33,6 +33,7 @@ export default class JDOrderHistory extends Component {
   }
   ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+  //返回按钮事件
   _pressButton() {
     const { navigator } = this.props;
     if (navigator) {
@@ -40,9 +41,8 @@ export default class JDOrderHistory extends Component {
     }
   }
 
-
-  _turnToJDUserPage() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+ //-------------菜单操作按钮事件-------------
+  _turnToJDUserPage() { 
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'JDUserInfo'
@@ -57,16 +57,14 @@ export default class JDOrderHistory extends Component {
       });
     }
   }
-  _turnToJDIndexPage() {
-    //Alert.alert('warning','点击了登录按钮'+this.props.navigator);
+  _turnToJDIndexPage() { 
     if (this.props.navigator) {
       this.props.navigator.push({
         name: 'JDIndex'
       });
     }
   }
-
-   
+  //--------------end------------
 
  render() {
     var navigationView = (
@@ -91,15 +89,11 @@ export default class JDOrderHistory extends Component {
           <View style={{ height:50, flexDirection: 'row', backgroundColor: "#05a5d1" }}>
             <View style={{ flex: 1, justifyContent: 'center', marginLeft: 8 }}>
               <TouchableHighlight onPress={this._pressButton.bind(this)}>
-                <Text style={{ fontSize: 18, color: 'red' }}>
-                  返回
-                             </Text>
+                <Text style={{ fontSize: 18, color: 'red' }}> 返回 </Text>
               </TouchableHighlight>
             </View>
             <View style={{ flex: 4, justifyContent: 'center', }}>
-              <Text style={{ fontSize: 18, alignSelf: 'center' }}>
-                凑单历史记录
-                                </Text>
+                <Text style={{ fontSize: 18, alignSelf: 'center' }}> 凑单历史记录 </Text>
             </View> 
             <View style={{ flex: 1, justifyContent: 'center', marginRight: 8 }}> 
             </View>
@@ -109,8 +103,8 @@ export default class JDOrderHistory extends Component {
             <ListView dataSource={this.state.dataSource}
               renderRow={(rowData) => this.customerRenderRow(rowData)} enableEmptySections={true}>
             </ListView>
-          </View >
-          <ActivityIndicatorComponent ref='dialog' />
+          </View > 
+           <ActivityIndicatorComponent ref='dialog' />
         </View>
       </DrawerLayoutAndroid>
       
@@ -145,10 +139,9 @@ export default class JDOrderHistory extends Component {
           <View style={styles.ListViewItemDtl}>
             <Text style={styles.footBlank} ></Text>
             <Text style={styles.listViewRowCount}>X
-            <Text style={styles.listViewRowCountValue}>{rowData.quantity}</Text>
-              件</Text>
+            <Text style={styles.listViewRowCountValue}>{rowData.quantity}</Text>  件</Text>
             <Text style={styles.listViewRowPrice} >共:￥
-              <Text style={styles.listViewRowAmount}>{rowData.amount}</Text>元
+            <Text style={styles.listViewRowAmount}>{rowData.amount}</Text>元
             </Text>
           </View>
         </View>
