@@ -80,7 +80,7 @@ namespace OrderCombinationWebApi.Controllers
         [HttpGet]
         [Route("SaveNewAddress")]
         [AllowAnonymous]
-        public async Task<UserAddress>  SaveNewAddress(int Id,int userId,string ConsigneeName,string PhoneNumber,string AddressArea,string AddressDetailed)
+        public async Task<UserAddress>  SaveNewAddress(int Id,int userId,string ConsigneeName,string PhoneNumber,string AddressArea,string AddressDetailed,bool isAddressDefault)
         {
             try{
                 OrderCombinationWebApi.Model.UserAddress  model = new OrderCombinationWebApi.Model.UserAddress ();
@@ -89,21 +89,45 @@ namespace OrderCombinationWebApi.Controllers
                 model.PhoneNumber=PhoneNumber;
                 model.AddressArea=AddressArea;
                 model.AddressDetailed=AddressDetailed;
-                model.IsAddressDefault=false;
+                model.IsAddressDefault=isAddressDefault;
                 model.CreateDate=DateTime.Now.Date;
-                model.CreateBy=userId.ToString();
-
+                model.CreateBy=userId.ToString(); 
+                //选择了默认地址
+                model.IsAddressDefault=isAddressDefault;
                 if(Id==0)
                 {
-                    this.orderCombinationDbContext.Add(model);
-                    this.orderCombinationDbContext.SaveChanges();
+                    // if(model.IsAddressDefault)
+                    // {   //将其他地址信息修改为非默认
+                    //     List<UserAddress> addresslist=new List<UserAddress>();
+                    //     addresslist=this.orderCombinationDbContext.UserAddresss.Where(u=>u.UserId==model.UserId).ToList();
+                    //     foreach (UserAddress Address in addresslist)
+                    //     { 
+                    //         Address.IsAddressDefault=false; 
+                    //         this.orderCombinationDbContext.Update(Address);
+                    //         this.orderCombinationDbContext.SaveChanges();
+                    //     }
+                    // }
+                   this.orderCombinationDbContext.Add(model);
+                   this.orderCombinationDbContext.SaveChanges();  
                     return model;
                 }
                 else{
-                    model.Id=Id;
-                    this.orderCombinationDbContext.Update(model);
-                    this.orderCombinationDbContext.SaveChanges();
-                    return model;
+                    //  if(model.IsAddressDefault)
+                    //  {   //将其他的地址信息修改为非默认
+                    //     List<UserAddress> addresslist=new List<UserAddress>();
+                    //     addresslist=this.orderCombinationDbContext.UserAddresss.Where(u=>u.UserId==model.UserId).ToList();
+                    //     foreach (UserAddress Address in addresslist)
+                    //     { 
+                    //         Address.IsAddressDefault=false; 
+                    //         this.orderCombinationDbContext.UserAddresss.Update(Address); 
+                    //         this.orderCombinationDbContext.SaveChangesAsync();
+                    //     }
+                    // }   
+ 
+                    model.Id=Id;  
+                    this.orderCombinationDbContext.UserAddresss.Update(model);
+                    this.orderCombinationDbContext.SaveChanges(); 
+                    return model; 
                 }
             }catch(Exception ex)
             {
@@ -111,7 +135,7 @@ namespace OrderCombinationWebApi.Controllers
                 return o;
             }
             
- 
+            //使用数据库的存储过程的方法
             //  UserAddress model = new UserAddress();
             // try
             // {
