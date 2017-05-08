@@ -9,9 +9,7 @@ import {
 import LoginView from '../ui/LoginView'
 import Home from '../ui/Home'
 import JDIndex from '../ui/JDIndex'
-import JDUserInfo from '../ui/JDUserInfo'
-import JDUserInfoEdit  from '../ui/JDUserInfoEdit'
-import shoppingCar from '../ui/shoppingCar'
+import JDUserInfo from '../ui/JDUserInfo' 
 import JDAddressEdit from '../ui/JDAddressEdit'
 import JDAddOrder from '../ui/JDAddOrder'
 import JDMergeOrder from '../ui/JDMergeOrder' 
@@ -25,16 +23,16 @@ export default class AppNavigator extends Component {
             LoginView: LoginView,
             HomePage: Home,
             JDIndex:JDIndex,
-            JDUserInfo:JDUserInfo,
-            JDUserInfoEdit:JDUserInfoEdit,
-            shoppingCar:shoppingCar,
+            JDUserInfo:JDUserInfo, 
             JDAddressEdit:JDAddressEdit,
+
             JDAddOrder:JDAddOrder,
             JDMergeOrder:JDMergeOrder,
+
             JDQueryHistory,JDQueryHistory,
             JDOrderHistory,JDOrderHistory
         };
-
+        //设置默认路由
         let [defaultName, defaultComponent] = ['LoginView',LoginView];
         return (
             <Navigator 
