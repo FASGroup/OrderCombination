@@ -143,10 +143,10 @@ export default class JDMergeOrder extends Component {
           <View style={styles.ListViewItemDtl}>
             <Text style={styles.footBlank} ></Text>
             <Text style={styles.listViewRowCount}>X
-            <Text style={styles.listViewRowCountValue}>{rowData.quantity}</Text>
+            <Text style={styles.listViewRowCountValue}>{rowData.quantity+''}</Text>
               件</Text>
             <Text style={styles.listViewRowPrice} >共:￥
-              <Text style={styles.listViewRowAmount}>{rowData.amount}</Text>元
+              <Text style={styles.listViewRowAmount}>{rowData.amount+''}</Text>元
             </Text>
           </View>
         </View>
